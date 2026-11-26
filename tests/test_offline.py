@@ -18,14 +18,25 @@ ROOT = Path(__file__).resolve().parents[1]
 # ---- 설정 ----
 def test_config_loads_and_validates():
     cfg = config.load(ROOT / "config.yaml")
-    assert "wikimedia" in cfg.sources
-    assert cfg.sources["wikimedia"].enabled is True
-    assert "wikimedia" in cfg.enabled_sources()
-    assert "pixabay" not in cfg.enabled_sources()  # 키 넣기 전엔 꺼짐
-    assert cfg.categories["travel"].need == 5
-    # source_order는 존재하는 출처만 남김
-    assert all(s in cfg.sources for s in cfg.categories["cafe"].source_order)
+    assert set(cfg.sources) == {"wikimedia", "pixabay", "openverse"}
+    assert cfg.runs_per_day == 24
+    assert cfg.sources["pixabay"].needs_key == "PIXABAY_KEY"
+    # 카테고리는 관리표의 한글 이름과 같게
+    assert {"여행", "카페·음식·공간", "반려동물", "책·독서"} <= set(cfg.categories)
+    n = sum(len(c.targets) for c in cfg.categories.values())
+    assert n >= 250                        # 주제 수백 개
+    for c in cfg.categories.values():
+        for t in c.targets:
+            ko, en = config.split_target(t)
+            assert ko and en and "|" not in en
 
+def test_run_cap_splits_daily_limit_per_hour():
+    cfg = config.load(ROOT / "config.yaml")
+    assert cfg.run_cap("wikimedia", 0) == 250     # 6000 ÷ 24
+    assert cfg.run_cap("pixabay", 0) == 21        # 500 ÷ 24 올림
+    assert cfg.run_cap("openverse", 0) == 13      # 300 ÷ 24 올림
+    assert cfg.run_cap("pixabay", 490) == 10      # 남은 하루 한도 이내
+    assert cfg.run_cap("pixabay", 500) == 0
 
 def test_config_rejects_unknown_source_order(tmp_path):
     bad = tmp_path / "c.yaml"
@@ -154,20 +165,24 @@ def test_decide_rejects_each_reason():
     assert any("주제" in r for r in decide(c, long_side=1600, is_photo=True, subject_score=0.05,
                             face=False, has_text=False, is_duplicate=False).reasons)
 
-def test_plan_only_uses_enabled_sources():
+def test_plan_skips_pixabay_without_key():
     cfg = config.load(ROOT / "config.yaml")
-    items = runner.plan(cfg)
-    assert len(items) > 0
-    # pixabay/openverse는 꺼져 있으니 지금은 모든 주제가 wikimedia로 감
-    assert all(it["source"] == "wikimedia" for it in items)
-    assert {it["category"] for it in items} >= {"travel", "cafe", "food", "animal"}
+    p = runner.plan(cfg, {}, env={})
+    assert "pixabay" in p["skipped_sources"] and "pixabay" not in p["caps"]
+    p2 = runner.plan(cfg, {}, env={"PIXABAY_KEY": "x"})
+    assert p2["caps"]["pixabay"] == 21 and p2["subjects"] >= 250
+
+def test_subjects_interleave_categories():
+    cfg = config.load(ROOT / "config.yaml")
+    first = [it["category"] for it in runner.subjects(cfg)[:len(cfg.categories)]]
+    assert len(set(first)) == len(cfg.categories)   # 처음 몇 개가 한 카테고리에 몰리지 않음
 
 
 # ---- 관리표 행 생성(순수 함수) ----
 from collector.drive import build_row  # noqa: E402
 
 def test_build_row_maps_columns():
-    meta = {"category": "travel", "subject": "경복궁", "source": "wikimedia",
+    meta = {"category": "여행", "subject": "경복궁", "source": "wikimedia",
             "title": "Gyeongbokgung.jpg", "page_url": "https://commons/...", 
             "author": "Hong", "license": "CC BY-SA 4.0", "phash": "abc123"}
     row = build_row(meta, file_id="DRIVEID1")
@@ -227,3 +242,48 @@ from collector.drive import phashes_from_memos  # noqa: E402
 def test_phashes_from_memos():
     memos = [["메모"], ["자동수집(collector) · phash:d202886fbf153af1 · 등록:2026-11-26"], [], ["사진 직접 확인: ..."]]
     assert phashes_from_memos(memos) == ["d202886fbf153af1"]
+
+
+# ---- 진행 상태·회전 ----
+from collector.progress import Progress, rotate  # noqa: E402
+
+def test_progress_persists_offset_and_kept(tmp_path):
+    p = Progress(tmp_path / "progress.json")
+    p.advance("여행|경복궁", "wikimedia", 50); p.add_kept("여행|경복궁", 3); p.rr = 7; p.save()
+    q = Progress(tmp_path / "progress.json")
+    assert q.offset("여행|경복궁", "wikimedia") == 50 and q.kept("여행|경복궁") == 3 and q.rr == 7
+
+def test_rotate():
+    assert rotate([1, 2, 3, 4], 5) == [2, 3, 4, 1]
+
+# ---- 새 출처 파싱 ----
+from collector.sources import pixabay, openverse  # noqa: E402
+
+def test_wikimedia_uses_thumb_and_offset():
+    p = wikimedia.build_search_params("x", 50, offset=100)
+    assert p["gsroffset"] == 100 and p["iiurlwidth"] == "2000"
+    payload = {"query": {"pages": {"1": {"title": "File:a.jpg", "imageinfo": [{
+        "url": "https://orig", "thumburl": "https://thumb", "mime": "image/jpeg", "width": 5000, "height": 3000}]}}}}
+    assert wikimedia.parse_search(payload)[0].url == "https://thumb"
+
+def test_pixabay_parse_and_paging():
+    p = pixabay.build_params("K", "latte art", 30, offset=60)
+    assert p["page"] == 3 and p["image_type"] == "photo"
+    c = pixabay.parse({"hits": [{"id": 9, "pageURL": "pg", "largeImageURL": "L", "user": "u", "imageWidth": 4000, "imageHeight": 3000}]})[0]
+    assert c.source == "pixabay" and c.url == "L" and c.license == "Pixabay Content License"
+
+def test_openverse_parse_filters_nd_nc_and_page_cap():
+    assert openverse.build_params("x", 20, offset=12 * 20) is None     # 12쪽 넘으면 멈춤
+    res = openverse.parse({"results": [
+        {"id": "a", "url": "u1", "license": "by", "license_version": "4.0", "creator": "c", "width": 2000, "height": 1500},
+        {"id": "b", "url": "u2", "license": "by-nd", "license_version": "4.0"},
+        {"id": "c", "url": "u3", "license": "cc0", "license_version": "1.0"}]})
+    assert [r.license for r in res] == ["CC BY 4.0", "CC0"]
+
+# ---- 사진 정리(2000px·JPEG) ----
+from collector.imageutil import normalize  # noqa: E402
+
+def test_normalize_downscales():
+    buf = io.BytesIO(); Image.new("RGB", (5000, 2500), (10, 20, 30)).save(buf, "PNG")
+    data, w, h = normalize(buf.getvalue())
+    assert (w, h) == (2000, 1000) and data[:2] == b"\xff\xd8"   # JPEG

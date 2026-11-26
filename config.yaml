@@ -1,45 +1,349 @@
-# promo-collector 설정
-# 출처별 하루 한도와 카테고리별 수집 목표. 숫자는 시범 뒤 조정합니다.
+# promo-collector 설정 — 출처별 시간 분배 수집
+# 매시간 실행(runs_per_day: 24). 출처마다 "하루 한도 ÷ 24"를 이번 시간 몫으로 받습니다.
+# 숫자는 첫날 실측(탈락률·오류)을 보고 조정합니다.
+
+runs_per_day: 24
+max_run_minutes: 40        # 한 번 실행 최대 시간(다음 시간 실행과 겹치지 않게)
 
 sources:
-  wikimedia:
+  wikimedia:               # 대량 허용. 썸네일(2000px)로 받아 부담 감소
     enabled: true
-    daily_limit: 3000      # 자유 이용. 대량 가능
-    per_query: 50          # 검색어 한 번에 받을 최대 수
-    min_interval_sec: 2    # 요청 간 간격(429 방지). 재시도는 자동 백오프
-  pixabay:
-    enabled: false         # 키를 비밀값에 넣고 켜기. 대량 금지 → 소량만
-    daily_limit: 300
+    daily_limit: 6000      # → 시간당 약 250장
+    per_query: 50
+    min_interval_sec: 2
+  pixabay:                 # 대량 다운로드 금지 → 소량. 검색은 24시간 캐시
+    enabled: true
+    needs_key: PIXABAY_KEY
+    daily_limit: 500       # → 시간당 약 21장
+    per_query: 30
+    min_interval_sec: 1
+  openverse:               # 키 없이 검색당 240건, 스크래핑 금지 → 소량
+    enabled: true
+    daily_limit: 300       # → 시간당 약 13장
     per_query: 20
-    min_interval_sec: 1    # 요청 간 최소 간격(분당 100회 한도 안)
-  openverse:
-    enabled: false         # 검색해서 고른 것만. 대량 금지
-    daily_limit: 300
-    per_query: 20
+    min_interval_sec: 2
 
-# 카테고리별 수집 목표. 자동 제작이 "사진 없음"으로 멈춘 주제는 needs.yaml에 쌓여 우선 수집됩니다.
-categories:
-  travel:
-    targets: ["경복궁", "불국사", "성산일출봉", "남산서울타워", "해운대"]
-    source_order: [wikimedia, openverse]
-    need: 5                # 주제당 목표 장수
-  cafe:
-    targets: ["아늑한 카페 인테리어", "원목 카페", "창가 커피"]
-    source_order: [pixabay, openverse, wikimedia]
-    need: 10
-  food:
-    targets: ["한식 백반", "파스타", "디저트 플레이팅"]
-    source_order: [pixabay, wikimedia, openverse]
-    need: 10
-  animal:
-    targets: ["강아지", "고양이", "길고양이"]
-    source_order: [pixabay, wikimedia, openverse]
-    need: 10
-
-# 검사 기준(1단계, 오픈소스). 통과해야 Drive·관리표로 갑니다.
 checks:
-  dedup_max_distance: 5    # 지문 거리 이 값 이하이면 중복으로 봄
-  allow_faces: false       # 얼굴 있으면 탈락(실존 인물·초상권)
-  require_photo: true      # 그림·삽화·AI풍이면 탈락
-  min_subject_score: 0.22  # CLIP 주제 일치 최소 점수
-  min_long_side: 1000      # 너무 작은 사진 탈락(픽셀)
+  dedup_max_distance: 5
+  allow_faces: false       # 클로즈업 얼굴만 탈락(멀거나 작은 사람은 통과)
+  require_photo: true      # 그림·삽화·AI풍 탈락
+  min_subject_score: 0.22
+  min_long_side: 1000
+
+# 카테고리 이름은 관리표의 기존 카테고리(한글)와 같게. 주제는 "한글|영어검색어"
+# source_order: 앞 출처부터 이번 시간 몫이 남아 있으면 사용. need: 주제당 목표 통과 장수
+categories:
+  여행:
+    source_order: [wikimedia, openverse]
+    need: 30
+    targets:
+      - 경복궁|Gyeongbokgung Palace
+      - 창덕궁|Changdeokgung Palace
+      - 덕수궁|Deoksugung Palace
+      - 남산서울타워|N Seoul Tower
+      - 북촌한옥마을|Bukchon Hanok Village
+      - 광화문|Gwanghwamun Gate
+      - 청계천|Cheonggyecheon stream
+      - 롯데월드타워|Lotte World Tower
+      - 불국사|Bulguksa Temple
+      - 석굴암|Seokguram Grotto
+      - 첨성대|Cheomseongdae
+      - 대릉원|Daereungwon tomb complex
+      - 해운대|Haeundae Beach
+      - 광안대교|Gwangan Bridge Busan
+      - 감천문화마을|Gamcheon Culture Village
+      - 성산일출봉|Seongsan Ilchulbong
+      - 한라산|Hallasan mountain
+      - 우도|Udo island Jeju
+      - 전주한옥마을|Jeonju Hanok Village
+      - 수원화성|Hwaseong Fortress Suwon
+      - 안동하회마을|Hahoe Folk Village
+      - 남이섬|Nami Island
+      - 설악산|Seoraksan
+      - 순천만|Suncheon Bay wetland
+      - 죽녹원|Juknokwon bamboo forest
+      - 군산근대역사박물관|Gunsan Modern History Museum
+      - 통영항|Tongyeong harbor
+      - 여수 밤바다|Yeosu night sea
+      - 에펠탑|Eiffel Tower
+      - 루브르 박물관|Louvre Museum
+      - 콜로세움|Colosseum Rome
+      - 사그라다 파밀리아|Sagrada Familia
+      - 도쿄타워|Tokyo Tower
+      - 후시미이나리|Fushimi Inari shrine
+      - 오사카성|Osaka Castle
+      - 타이베이 101|Taipei 101
+      - 왓아룬|Wat Arun Bangkok
+      - 다낭 미케비치|My Khe Beach Da Nang
+      - 마리나베이샌즈|Marina Bay Sands
+      - 빅토리아 하버|Victoria Harbour Hong Kong
+      - 타임스스퀘어|Times Square New York
+      - 자유의 여신상|Statue of Liberty
+      - 타워브리지|Tower Bridge London
+      - 카를교|Charles Bridge Prague
+      - 쾰른 대성당|Cologne Cathedral
+      - 산토리니|Santorini Oia
+      - 융프라우|Jungfrau Switzerland
+      - 앙코르와트|Angkor Wat
+  카페·음식·공간:
+    source_order: [pixabay, openverse, wikimedia]
+    need: 40
+    targets:
+      - 라떼아트|latte art
+      - 에스프레소|espresso cup
+      - 핸드드립 커피|pour over coffee
+      - 아이스커피|iced coffee glass
+      - 카페 인테리어|cafe interior
+      - 창가 카페 좌석|cafe window seat
+      - 원목 카페|wooden cafe table
+      - 크루아상|croissant
+      - 베이글|bagel
+      - 케이크 한 조각|slice of cake
+      - 마카롱|macarons
+      - 디저트 플레이팅|dessert plating
+      - 브런치|brunch plate
+      - 파스타|pasta dish
+      - 피자|pizza
+      - 비빔밥|bibimbap
+      - 김치찌개|kimchi stew
+      - 떡볶이|tteokbokki
+      - 라면|ramen bowl
+      - 샐러드|salad bowl
+      - 스테이크|steak dinner
+      - 초밥|sushi
+      - 한식 상차림|korean food table
+      - 빵집 진열대|bakery display
+      - 과일 바구니|fruit basket
+      - 차 한 잔|cup of tea
+      - 와인잔|wine glass
+      - 칵테일|cocktail
+      - 아이스크림|ice cream cone
+      - 팬케이크|pancakes
+  반려동물:
+    source_order: [pixabay, openverse, wikimedia]
+    need: 40
+    targets:
+      - 강아지|puppy
+      - 고양이|cat
+      - 아기 고양이|kitten
+      - 골든리트리버|golden retriever
+      - 웰시코기|corgi
+      - 시바견|shiba inu
+      - 푸들|poodle
+      - 말티즈|maltese dog
+      - 길고양이|stray cat
+      - 낮잠 자는 고양이|sleeping cat
+      - 산책하는 강아지|dog walking park
+      - 햄스터|hamster
+      - 토끼|rabbit
+      - 앵무새|parrot
+      - 금붕어|goldfish
+      - 고슴도치|hedgehog
+      - 거북이|turtle
+      - 강아지 장난감|dog toy
+      - 창가 고양이|cat by window
+      - 반려견 간식|dog treats
+  책·독서:
+    source_order: [openverse, pixabay, wikimedia]
+    need: 30
+    targets:
+      - 펼쳐진 책|open book
+      - 책장|bookshelf
+      - 도서관|library interior
+      - 서점|bookstore
+      - 독서등|reading lamp
+      - 책과 커피|book and coffee
+      - 쌓인 책|stack of books
+      - 노트와 펜|notebook and pen
+      - 만년필|fountain pen
+      - 책갈피|bookmark
+      - 창가 독서|reading by window
+      - 오래된 책|old books
+      - 서재|home study room
+      - 일기장|journal diary
+      - 책 속 말린 꽃|pressed flower book
+  심리·생활:
+    source_order: [pixabay, openverse, wikimedia]
+    need: 40
+    targets:
+      - 창가 햇살|sunlight through window
+      - 아침 커튼|morning curtains
+      - 비 오는 창문|rainy window
+      - 노을|sunset sky
+      - 밤하늘 별|starry night sky
+      - 촛불|candle light
+      - 포근한 담요|cozy blanket
+      - 머그컵|mug on table
+      - 숲길|forest path
+      - 잔잔한 호수|calm lake
+      - 바다 파도|ocean waves
+      - 구름|clouds sky
+      - 꽃밭|flower field
+      - 들판|meadow
+      - 공원 벤치|park bench
+      - 빈 의자|empty chair
+      - 나무 한 그루|lone tree
+      - 안개 낀 숲|misty forest
+      - 눈 내린 풍경|snowy landscape
+      - 가을 낙엽|autumn leaves
+      - 벚꽃|cherry blossom
+      - 해바라기|sunflowers
+      - 모래 위 발자국|footprints in sand
+      - 빛이 드는 문|open door light
+      - 벽시계|wall clock
+  인테리어·룸투어:
+    source_order: [pixabay, openverse, wikimedia]
+    need: 30
+    targets:
+      - 거실 인테리어|living room interior
+      - 침실|bedroom interior
+      - 주방|kitchen interior
+      - 원룸|studio apartment interior
+      - 북유럽 인테리어|scandinavian interior
+      - 미니멀 인테리어|minimalist interior
+      - 식물 인테리어|indoor plants
+      - 책상 셋업|desk setup
+      - 조명 인테리어|pendant lamp interior
+      - 소파|sofa living room
+      - 러그|rug living room
+      - 욕실|bathroom interior
+      - 발코니|balcony plants
+      - 한옥 내부|hanok interior
+      - 원목 가구|wooden furniture
+  건강·운동:
+    source_order: [pixabay, openverse, wikimedia]
+    need: 30
+    targets:
+      - 요가 매트|yoga mat
+      - 덤벨|dumbbells
+      - 러닝화|running shoes
+      - 산책로|walking trail
+      - 자전거|bicycle
+      - 수영장|swimming pool
+      - 건강한 샐러드|healthy salad bowl
+      - 신선한 과일|fresh fruit
+      - 물병|water bottle
+      - 스트레칭|stretching exercise
+      - 등산로|hiking trail mountain
+      - 헬스장|gym equipment
+      - 스무디|smoothie
+      - 견과류|nuts
+      - 채소|vegetables
+  뉴스·일반 배경:
+    source_order: [wikimedia, pixabay, openverse]
+    need: 30
+    targets:
+      - 도시 야경|city skyline night
+      - 고층 빌딩|skyscrapers
+      - 지하철|subway train
+      - 고속도로|highway traffic
+      - 신문|newspaper
+      - 마이크|microphone
+      - 회의실|conference room
+      - 지구본|globe
+      - 국회의사당|National Assembly Seoul
+      - 법원|courthouse
+      - 공장|factory
+      - 컨테이너 항구|container port
+      - 공항|airport terminal
+      - 비행기|airplane in sky
+      - 태양광 패널|solar panels
+  문화·취미·전시:
+    source_order: [pixabay, openverse, wikimedia]
+    need: 30
+    targets:
+      - 미술관|art gallery
+      - 박물관|museum hall
+      - 콘서트 무대|concert stage
+      - 영화관|cinema seats
+      - 공연장|theater stage
+      - 기타|acoustic guitar
+      - 피아노|piano
+      - 카메라|camera
+      - 필름 카메라|film camera
+      - 레코드판|vinyl records
+      - 보드게임|board game
+      - 퍼즐|jigsaw puzzle
+      - 뜨개질|knitting
+      - 도자기|pottery
+      - 서예 붓|calligraphy brush
+      - 그림 도구|paint brushes
+      - 캠핑|camping tent
+      - 낚시|fishing
+      - 정원 가꾸기|gardening
+  비즈니스·경제:
+    source_order: [pixabay, openverse, wikimedia]
+    need: 30
+    targets:
+      - 노트북 책상|laptop on desk
+      - 사무실|office
+      - 회의 테이블|meeting table
+      - 차트 서류|charts on paper
+      - 계산기|calculator
+      - 동전|coins
+      - 지폐|banknotes
+      - 돼지 저금통|piggy bank
+      - 주식 화면|stock market screen
+      - 악수|handshake
+      - 명함|business cards
+      - 서류|documents
+      - 코워킹 스페이스|coworking space
+      - 창고|warehouse
+      - 택배 상자|cardboard boxes
+  쇼핑·선물:
+    source_order: [pixabay, openverse, wikimedia]
+    need: 30
+    targets:
+      - 선물 상자|gift box
+      - 리본|ribbon
+      - 쇼핑백|shopping bags
+      - 꽃다발|bouquet
+      - 전통시장|traditional market
+      - 쇼핑몰|shopping mall
+      - 향수|perfume bottle
+      - 화장품|cosmetics
+      - 액세서리|jewelry
+      - 손목시계|wristwatch
+      - 생일 케이크|birthday cake
+      - 카드와 봉투|greeting card envelope
+      - 포장지|wrapping paper
+      - 장바구니|shopping basket
+      - 크리스마스 선물|christmas presents
+  시즌·이벤트:
+    source_order: [pixabay, openverse, wikimedia]
+    need: 30
+    targets:
+      - 크리스마스 트리|christmas tree
+      - 눈사람|snowman
+      - 불꽃놀이|fireworks
+      - 떡국|tteokguk
+      - 송편|songpyeon
+      - 할로윈 호박|halloween pumpkin
+      - 벚꽃 축제|cherry blossom festival
+      - 여름 해변|summer beach
+      - 단풍|autumn foliage
+      - 눈 내린 거리|snowy street
+      - 연등|lotus lantern
+      - 발렌타인 초콜릿|valentine chocolate
+      - 졸업 학사모|graduation cap
+      - 캠프파이어|campfire
+      - 겨울 조명|winter lights
+  자기계발·루틴:
+    source_order: [pixabay, openverse, wikimedia]
+    need: 30
+    targets:
+      - 플래너|planner
+      - 체크리스트|checklist
+      - 모닝 커피와 책상|morning coffee desk
+      - 알람시계|alarm clock
+      - 다이어리|diary
+      - 정돈된 책상|tidy desk
+      - 공부 노트|study desk notes
+      - 스탠드 조명|desk lamp
+      - 포스트잇|sticky notes
+      - 모래시계|hourglass
+      - 달력|calendar
+      - 운동화|sneakers
+      - 물 한 잔|glass of water
+      - 명상 쿠션|meditation cushion
+      - 일출|sunrise

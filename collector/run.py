@@ -1,156 +1,195 @@
-"""수집기 실행기.
+"""수집기 실행기 — 출처별 시간 분배.
 
-흐름: 카테고리별 목표 주제 → 출처 순서대로 검색(한도 안에서) → 받기 → 중복·사진·얼굴·글자·주제 검사
-     → 통과분을 out/ 에 저장(+메타). Drive 업로드·관리표 기록은 다음 단계에서 붙입니다.
+매시간 실행. 출처마다 이번 시간 몫(하루 한도 ÷ 하루 실행 횟수)만 받습니다.
+주제는 매번 다른 위치부터 돌고(rr), 주제마다 검색 결과 위치(offset)를 기억해 다음 페이지를 이어 받습니다.
 
-모드
-  --dry-run   : 받지 않고 "어떤 주제를 어느 출처에서 몇 장 찾을지"만 출력(네트워크 없음)
-  (기본)      : 실제 검색·다운로드·검사. 모델·네트워크가 필요하므로 Actions에서 검증
+흐름: 주제 → 카테고리의 출처 순서대로(이번 시간 몫이 남은 출처) 검색 → 받기 → 2000px로 정리
+     → 중복·크기·사진·얼굴·글자·주제 검사 → 통과분 Drive 업로드 → 끝나고 관리표에 한 번에 기록
 
-끝나면 state.json(하루 한도 집계)과 report를 남깁니다.
+모드: --dry-run(받지 않고 이번 실행 계획만) · --max-keep N(시험: 통과 N장에서 멈춤)
 """
 from __future__ import annotations
 import argparse
 import json
 import os
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 from . import config, ratelimit
 from .checks.dedup import Deduper
 from .pipeline import decide
-from .sources import wikimedia
+from .progress import Progress, rotate
+from .sources import SOURCES
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def plan(cfg: config.Config) -> list[dict]:
-    """각 카테고리/주제를 어느 출처에서 몇 장 찾을지 계획만 세움(네트워크 없음)."""
-    items = []
+def subjects(cfg: config.Config) -> list[dict]:
+    """모든 주제를 카테고리를 섞어 고르게 나열(카테고리 하나에 몰리지 않게)."""
+    per_cat = []
     for cat in cfg.categories.values():
-        for subject in cat.targets:
-            src = next((s for s in cat.source_order if cfg.sources[s].enabled), None)
-            items.append({"category": cat.name, "subject": subject,
-                          "source": src, "need": cat.need})
-    return items
+        per_cat.append([{"category": cat.name, "target": t, "need": cat.need, "order": cat.source_order}
+                        for t in cat.targets])
+    out, i = [], 0
+    while any(per_cat):
+        for lst in per_cat:
+            if i < len(lst):
+                out.append(lst[i])
+        i += 1
+        if all(i >= len(l) for l in per_cat):
+            break
+    return out
 
 
-def _load_known_hashes(path: Path) -> list[str]:
-    if path.exists():
-        try:
-            return json.loads(path.read_text(encoding="utf-8"))
-        except Exception:
-            return []
-    return []
+def available_sources(cfg: config.Config, env=os.environ) -> list[str]:
+    return [n for n, s in cfg.sources.items()
+            if s.enabled and n in SOURCES and (not s.needs_key or env.get(s.needs_key))]
+
+
+def plan(cfg: config.Config, budget_used: dict[str, int] | None = None, env=os.environ) -> dict:
+    """이번 실행 계획(네트워크 없음): 출처별 이번 시간 몫, 쓸 수 있는 출처, 주제 수."""
+    used = budget_used or {}
+    srcs = available_sources(cfg, env)
+    return {
+        "caps": {s: cfg.run_cap(s, used.get(s, 0)) for s in srcs},
+        "skipped_sources": [n for n in cfg.sources if n not in srcs],
+        "subjects": len(subjects(cfg)),
+    }
 
 
 def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, max_keep: int = 0) -> dict:
-    items = plan(cfg)
-    if dry_run:
-        for it in items:
-            print(f"[dry-run] {it['category']} · {it['subject']} → {it['source']} (목표 {it['need']})")
-        return {"dry_run": True, "planned": len(items)}
-
-    from .http import make_session  # 실제 실행에서만 필요
-    session = make_session()
     budget = ratelimit.Budget(state_dir / "state.json")
-    deduper = Deduper(cfg.checks.dedup_max_distance,
-                      known_hex=_load_known_hashes(state_dir / "known_hashes.json"))
-    from .checks import vision  # 모델 로드(무거움) — 실제 실행에서만
+    used_today = {s: budget.used(s) for s in cfg.sources}
+    p = plan(cfg, used_today)
+    if dry_run:
+        print(json.dumps({"dry_run": True, **p}, ensure_ascii=False))
+        for it in subjects(cfg)[:10]:
+            print(f"[dry-run] {it['category']} · {it['target']} → {it['order']} (목표 {it['need']})")
+        return {"dry_run": True, **p}
 
+    from .http import make_session
+    from .imageutil import normalize
+    from .config import split_target
+    from .sources import pixabay
+    session = make_session()
+    progress = Progress(state_dir / "progress.json")
+    pixabay.use_cache(state_dir / "pixabay_cache.json")
+    deduper = Deduper(cfg.checks.dedup_max_distance)
+    from .checks import vision
+
+    caps = dict(p["caps"])                       # 이번 실행 출처별 남은 몫
+    took = {s: 0 for s in caps}
+    deadline = time.monotonic() + cfg.max_run_minutes * 60
     out_dir.mkdir(parents=True, exist_ok=True)
-    report = {"kept": 0, "rejected": 0, "uploaded": 0, "reasons": {}, "by_source": {}}
+    report = {"kept": 0, "rejected": 0, "uploaded": 0, "reasons": {}, "by_source": {},
+              "kept_by_source": {}, "caps": dict(caps), "skipped_sources": p["skipped_sources"]}
+    err = lambda m: report.setdefault("errors", []).append(m[:200])
 
-    # Drive 업로드(토큰 있을 때만). 없으면 out/ 저장만 하고 업로드 건너뜀.
     from . import drive as drivemod
-    uploader = None
-    pending_rows: list[list[str]] = []
+    uploader, pending_rows = None, []
     if drivemod.creds_available():
-        folder = os.environ.get("DRIVE_FOLDER_ID", "")
-        sheet = os.environ.get("SHEET_ID", "")
+        folder, sheet = os.environ.get("DRIVE_FOLDER_ID", ""), os.environ.get("SHEET_ID", "")
         if folder and sheet:
             uploader = drivemod.Uploader(folder, sheet)
-            try:  # 관리표에 이미 올린 사진 지문 → 중복 방지
+            try:
+                import imagehash
                 for h in uploader.known_phashes():
-                    deduper.add(__import__("imagehash").hex_to_hash(h))
+                    deduper.add(imagehash.hex_to_hash(h))
             except Exception as e:
-                report.setdefault("errors", []).append(f"known_phashes: {type(e).__name__}")
+                err(f"known_phashes: {type(e).__name__}")
         else:
-            report.setdefault("errors", []).append("DRIVE_FOLDER_ID/SHEET_ID 비어 있음 → 업로드 생략")
+            err("DRIVE_FOLDER_ID/SHEET_ID 비어 있음 → 업로드 생략")
 
+    def left(src):  # 이번 실행에서 이 출처가 더 받을 수 있나
+        return took.get(src, 0) < caps.get(src, 0)
+
+    items = rotate(subjects(cfg), progress.rr)
+    visited = 0
     for it in items:
+        if time.monotonic() > deadline or not any(left(s) for s in caps):
+            break
         if max_keep and report["kept"] >= max_keep:
-            break  # 시험용: 통과 N장에서 멈춤
-        src_name = it["source"]
-        if not src_name:
+            break
+        visited += 1
+        ko, en = split_target(it["target"])
+        key = f"{it['category']}|{ko}"
+        if progress.kept(key) >= it["need"]:
             continue
-        scfg = cfg.sources[src_name]
-        if not budget.can_take(src_name, scfg.daily_limit, 1):
-            continue  # 오늘 이 출처 한도 끝
-        budget.wait_interval(src_name, scfg.min_interval_sec)
-        if src_name == "wikimedia":
+        for src in it["order"]:
+            if src not in caps or not left(src) or progress.is_done(key, src):
+                continue
+            mod, scfg = SOURCES[src], cfg.sources[src]
+            budget.wait_interval(src, scfg.min_interval_sec)
+            off = progress.offset(key, src)
             try:
-                cands = wikimedia.search(it["subject"], min(scfg.per_query, it["need"] * 4), session)
-            except Exception as e:  # 한 주제 실패가 전체를 멈추지 않게
-                report.setdefault("errors", []).append(f"{it['subject']}: {type(e).__name__}")
+                cands = mod.search(en, scfg.per_query, session, offset=off,
+                                   key=os.environ.get(scfg.needs_key, "") if scfg.needs_key else "")
+            except Exception as e:
+                err(f"search {src} {ko}: {type(e).__name__}")
                 continue
-        else:
-            # pixabay/openverse 어댑터는 다음 커밋에서. 지금은 건너뜀.
-            continue
-        kept_for_item = 0
-        for c in cands:
-            if kept_for_item >= it["need"] or (max_keep and report["kept"] >= max_keep):
-                break
-            if not budget.can_take(src_name, scfg.daily_limit, 1):
-                break
-            budget.wait_interval(src_name, scfg.min_interval_sec)
-            try:
-                data = wikimedia.download(c, session)
-            except Exception:
+            if not cands:
+                progress.mark_done(key, src)
                 continue
-            budget.take(src_name, 1)
-            report["by_source"][src_name] = report["by_source"].get(src_name, 0) + 1
-            is_dup, hexh = deduper.check_bytes(data)
-            v = vision.inspect(data, subject=it["subject"])
-            verdict = decide(cfg.checks, long_side=max(c.width, c.height),
-                             is_photo=v.is_photo, subject_score=v.subject_score,
-                             face=v.face, has_text=v.has_text, is_duplicate=is_dup)
-            if not verdict.ok:
-                report["rejected"] += 1
-                for r in verdict.reasons:
-                    report["reasons"][r] = report["reasons"].get(r, 0) + 1
-                continue
-            stem = f"{it['category']}_{hexh[:12]}"
-            meta = {
-                "category": it["category"], "subject": it["subject"], "source": c.source,
-                "source_id": c.source_id, "title": c.title, "page_url": c.page_url,
-                "author": c.author, "license": c.license, "phash": hexh,
-                "width": c.width, "height": c.height,
-            }
-            (out_dir / f"{stem}.jpg").write_bytes(data)
-            (out_dir / f"{stem}.json").write_text(
-                json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
-            report["kept"] += 1
-            kept_for_item += 1
-            if uploader is not None:
+            progress.advance(key, src, len(cands))
+            for c in cands:
+                if not left(src) or progress.kept(key) >= it["need"] or time.monotonic() > deadline:
+                    break
+                if max_keep and report["kept"] >= max_keep:
+                    break
+                budget.wait_interval(src, scfg.min_interval_sec)
                 try:
-                    fid = uploader.upload(data, f"{stem}.jpg")
-                    pending_rows.append(drivemod.build_row(meta, fid))
-                    report["uploaded"] += 1
+                    raw = mod.download(c, session)
+                    data, w, h = normalize(raw)
                 except Exception as e:
-                    report.setdefault("errors", []).append(f"upload {stem}: {type(e).__name__}: {str(e)[:160]}")
+                    err(f"download {src}: {type(e).__name__}")
+                    continue
+                took[src] += 1
+                budget.take(src, 1)
+                report["by_source"][src] = report["by_source"].get(src, 0) + 1
+                is_dup, hexh = deduper.check_bytes(data)
+                v = vision.inspect(data, subject=en)
+                verdict = decide(cfg.checks, long_side=max(w, h), is_photo=v.is_photo,
+                                 subject_score=v.subject_score, face=v.face, has_text=v.has_text,
+                                 is_duplicate=is_dup)
+                if not verdict.ok:
+                    report["rejected"] += 1
+                    for r in verdict.reasons:
+                        r = r.split("(")[0]   # 이유별 집계(숫자 빼고)
+                        report["reasons"][r] = report["reasons"].get(r, 0) + 1
+                    continue
+                stem = f"{src}_{hexh[:12]}"
+                meta = {"category": it["category"], "subject": ko, "source": c.source,
+                        "source_id": c.source_id, "title": c.title, "page_url": c.page_url,
+                        "author": c.author, "license": c.license, "phash": hexh, "width": w, "height": h}
+                (out_dir / f"{stem}.jpg").write_bytes(data)
+                report["kept"] += 1
+                report["kept_by_source"][src] = report["kept_by_source"].get(src, 0) + 1
+                progress.add_kept(key)
+                if uploader is not None:
+                    try:
+                        fid = uploader.upload(data, f"{stem}.jpg")
+                        pending_rows.append(drivemod.build_row(meta, fid))
+                        report["uploaded"] += 1
+                    except Exception as e:
+                        err(f"upload {stem}: {type(e).__name__}: {str(e)[:120]}")
+            if progress.kept(key) >= it["need"]:
+                break
 
-    # 관리표 기록은 한 번에(시트 호출 최소화). 이미 쌓은 지문도 다음 실행 중복 방지용으로 저장.
+    progress.rr = progress.rr + max(1, visited)   # 다음 실행은 이어서 다른 주제부터
     if uploader is not None and pending_rows:
         try:
             uploader.append_rows(pending_rows)
         except Exception as e:
-            report.setdefault("errors", []).append(f"append_rows: {type(e).__name__}")
+            err(f"append_rows: {type(e).__name__}: {str(e)[:120]}")
     budget.save()
+    progress.save()
+    pixabay.save_cache()
+    report["took"] = took
     report["at"] = datetime.now(timezone.utc).isoformat()
-    (state_dir / "last_report.json").write_text(
-        json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    state_dir.mkdir(parents=True, exist_ok=True)
+    (state_dir / "last_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False))
     return report
 

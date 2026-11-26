@@ -2,7 +2,6 @@ out/
 __pycache__/
 *.pyc
 .venv/
-# state/는 commit 함(하루 한도 집계). 사진(out/)은 commit 안 함.
 
 .pytest_cache/
-state/
+# state/는 commit 함(하루 한도·주제 진행·검색 캐시를 다음 실행이 이어 씀). 사진(out/)은 commit 안 함.

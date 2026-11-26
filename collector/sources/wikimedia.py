@@ -25,10 +25,11 @@ class Candidate:
     height: int
 
 
-def build_search_params(query: str, per_query: int) -> dict[str, Any]:
-    """파일 네임스페이스(6)에서 비트맵 이미지만 검색. 검색어는 그대로 전달."""
+def build_search_params(query: str, per_query: int, offset: int = 0) -> dict[str, Any]:
+    """파일 네임스페이스(6)에서 비트맵 이미지만 검색. offset으로 다음 페이지를 이어 받음.
+    원본(장당 10MB 안팎) 대신 긴 변 2000px 썸네일 주소(thumburl)를 받음 → Wikimedia 부담·용량 감소."""
     n = max(1, min(int(per_query), 50))
-    return {
+    p = {
         "action": "query",
         "format": "json",
         "generator": "search",
@@ -37,8 +38,11 @@ def build_search_params(query: str, per_query: int) -> dict[str, Any]:
         "gsrlimit": n,
         "prop": "imageinfo",
         "iiprop": "url|size|extmetadata|mime",
-        "iiurlwidth": "1600",
+        "iiurlwidth": "2000",
     }
+    if offset > 0:
+        p["gsroffset"] = int(offset)
+    return p
 
 
 def _ext(meta: dict[str, Any], key: str) -> str:
@@ -69,7 +73,7 @@ def parse_search(payload: dict[str, Any]) -> list[Candidate]:
             source="wikimedia",
             source_id=str(page.get("title", "")),
             title=str(page.get("title", "")).removeprefix("File:"),
-            url=str(info.get("url", "")),
+            url=str(info.get("thumburl") or info.get("url", "")),
             page_url=str(info.get("descriptionurl", "")),
             author=_ext(meta, "Artist") or _ext(meta, "Credit"),
             license=_ext(meta, "LicenseShortName") or _ext(meta, "License"),
@@ -79,9 +83,9 @@ def parse_search(payload: dict[str, Any]) -> list[Candidate]:
     return out
 
 
-def search(query: str, per_query: int, session) -> list[Candidate]:
+def search(query: str, per_query: int, session, offset: int = 0, key: str = "") -> list[Candidate]:
     """실제 검색(네트워크). session은 requests.Session 유사 객체."""
-    r = session.get(API, params=build_search_params(query, per_query),
+    r = session.get(API, params=build_search_params(query, per_query, offset),
                      headers={"User-Agent": UA}, timeout=30)
     r.raise_for_status()
     return parse_search(r.json())
