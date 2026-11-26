@@ -45,7 +45,7 @@ def _load_known_hashes(path: Path) -> list[str]:
     return []
 
 
-def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path) -> dict:
+def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, max_keep: int = 0) -> dict:
     items = plan(cfg)
     if dry_run:
         for it in items:
@@ -75,6 +75,8 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path) ->
             report.setdefault("errors", []).append("DRIVE_FOLDER_ID/SHEET_ID 비어 있음 → 업로드 생략")
 
     for it in items:
+        if max_keep and report["kept"] >= max_keep:
+            break  # 시험용: 통과 N장에서 멈춤
         src_name = it["source"]
         if not src_name:
             continue
@@ -93,7 +95,7 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path) ->
             continue
         kept_for_item = 0
         for c in cands:
-            if kept_for_item >= it["need"]:
+            if kept_for_item >= it["need"] or (max_keep and report["kept"] >= max_keep):
                 break
             if not budget.can_take(src_name, scfg.daily_limit, 1):
                 break
@@ -154,9 +156,10 @@ def main(argv=None):
     ap.add_argument("--out", default=str(ROOT / "out"))
     ap.add_argument("--state", default=str(ROOT / "state"))
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--max-keep", type=int, default=0, help="시험용: 통과 N장에서 멈춤(0=제한 없음)")
     args = ap.parse_args(argv)
     cfg = config.load(args.config)
-    run(cfg, dry_run=args.dry_run, out_dir=Path(args.out), state_dir=Path(args.state))
+    run(cfg, dry_run=args.dry_run, out_dir=Path(args.out), state_dir=Path(args.state), max_keep=args.max_keep)
     return 0
 
 

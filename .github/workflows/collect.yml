@@ -11,6 +11,10 @@ on:
         description: "받지 않고 계획만 출력"
         type: boolean
         default: false
+      max_keep:
+        description: "시험용: 통과 N장에서 멈춤(0=제한 없음)"
+        type: number
+        default: 0
 
 concurrency:
   group: collect
@@ -50,7 +54,7 @@ jobs:
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             python -m collector.run --dry-run
           else
-            python -m collector.run
+            python -m collector.run --max-keep "${{ inputs.max_keep || 0 }}"
           fi
 
       # 하루 한도 집계(state)와 리포트만 저장소에 남김. 사진은 commit하지 않음.
