@@ -9,7 +9,7 @@ import dataclasses
 from typing import Any
 
 API = "https://commons.wikimedia.org/w/api.php"
-UA = "promo-collector/0.1 (contact: set in repo; non-commercial image sourcing)"
+from ..http import UA  # 공용 User-Agent
 
 
 @dataclasses.dataclass

@@ -51,8 +51,8 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path) ->
             print(f"[dry-run] {it['category']} · {it['subject']} → {it['source']} (목표 {it['need']})")
         return {"dry_run": True, "planned": len(items)}
 
-    import requests  # 실제 실행에서만 필요
-    session = requests.Session()
+    from .http import make_session  # 실제 실행에서만 필요
+    session = make_session()
     budget = ratelimit.Budget(state_dir / "state.json")
     deduper = Deduper(cfg.checks.dedup_max_distance,
                       known_hex=_load_known_hashes(state_dir / "known_hashes.json"))
@@ -68,8 +68,13 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path) ->
         scfg = cfg.sources[src_name]
         if not budget.can_take(src_name, scfg.daily_limit, 1):
             continue  # 오늘 이 출처 한도 끝
+        budget.wait_interval(src_name, scfg.min_interval_sec)
         if src_name == "wikimedia":
-            cands = wikimedia.search(it["subject"], min(scfg.per_query, it["need"] * 4), session)
+            try:
+                cands = wikimedia.search(it["subject"], min(scfg.per_query, it["need"] * 4), session)
+            except Exception as e:  # 한 주제 실패가 전체를 멈추지 않게
+                report.setdefault("errors", []).append(f"{it['subject']}: {type(e).__name__}")
+                continue
         else:
             # pixabay/openverse 어댑터는 다음 커밋에서. 지금은 건너뜀.
             continue

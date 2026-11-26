@@ -6,6 +6,7 @@ sources:
     enabled: true
     daily_limit: 3000      # 자유 이용. 대량 가능
     per_query: 50          # 검색어 한 번에 받을 최대 수
+    min_interval_sec: 2    # 요청 간 간격(429 방지). 재시도는 자동 백오프
   pixabay:
     enabled: false         # 키를 비밀값에 넣고 켜기. 대량 금지 → 소량만
     daily_limit: 300
