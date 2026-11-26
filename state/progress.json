@@ -1,0 +1,49 @@
+{
+ "subjects": {
+  "여행|경복궁": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "카페·음식·공간|라떼아트": {
+   "kept": 40,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "반려동물|강아지": {
+   "kept": 35,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "책·독서|펼쳐진 책": {
+   "kept": 13,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|창가 햇살": {
+   "kept": 32,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "인테리어·룸투어|거실 인테리어": {
+   "kept": 19,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  }
+ },
+ "rr": 6
+}

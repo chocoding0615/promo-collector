@@ -1,0 +1,34 @@
+{
+  "kept": 169,
+  "rejected": 115,
+  "uploaded": 169,
+  "reasons": {
+    "그림·삽화·AI풍": 95,
+    "얼굴 있음": 20,
+    "중복": 3,
+    "너무 작음": 17,
+    "글자·로고·워터마크": 11
+  },
+  "by_source": {
+    "wikimedia": 250,
+    "pixabay": 21,
+    "openverse": 13
+  },
+  "kept_by_source": {
+    "wikimedia": 145,
+    "pixabay": 14,
+    "openverse": 10
+  },
+  "caps": {
+    "wikimedia": 250,
+    "pixabay": 21,
+    "openverse": 13
+  },
+  "skipped_sources": [],
+  "took": {
+    "wikimedia": 250,
+    "pixabay": 21,
+    "openverse": 13
+  },
+  "at": "2026-11-26T15:34:43.004512+00:00"
+}
