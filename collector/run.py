@@ -71,6 +71,11 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, ma
         sheet = os.environ.get("SHEET_ID", "")
         if folder and sheet:
             uploader = drivemod.Uploader(folder, sheet)
+            try:  # 관리표에 이미 올린 사진 지문 → 중복 방지
+                for h in uploader.known_phashes():
+                    deduper.add(__import__("imagehash").hex_to_hash(h))
+            except Exception as e:
+                report.setdefault("errors", []).append(f"known_phashes: {type(e).__name__}")
         else:
             report.setdefault("errors", []).append("DRIVE_FOLDER_ID/SHEET_ID 비어 있음 → 업로드 생략")
 

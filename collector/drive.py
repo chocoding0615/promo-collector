@@ -107,6 +107,13 @@ class Uploader:
         ).execute()
         return f["id"]
 
+    def known_phashes(self) -> list[str]:
+        _, sheets = self._services()
+        memos = sheets.spreadsheets().values().get(
+            spreadsheetId=self.sheet_id, range=f"'{CATALOG_TAB}'!N1:N",
+        ).execute().get("values", [])
+        return phashes_from_memos(memos)
+
     def append_rows(self, rows: list[list[str]]) -> None:
         """표 맨 아래 다음 줄부터 정확한 위치에 씀(행 삽입 없음).
         예전 append(A1, INSERT_ROWS)는 맨 위에 줄을 끼워 넣어 표 전체를 밀었음 → 사용 금지."""
@@ -124,6 +131,16 @@ class Uploader:
             valueInputOption="RAW",
             body={"values": rows},
         ).execute()
+
+
+def phashes_from_memos(memos: list[list[str]]) -> list[str]:
+    """관리표 메모 칸에서 'phash:xxxx'를 모음(이미 올린 사진 → 다음 실행 중복 방지)."""
+    import re
+    out = []
+    for r in memos:
+        if r:
+            out += re.findall(r"phash:([0-9a-f]{16})", str(r[0]))
+    return out
 
 
 def next_free_row(col_a: list[list[str]]) -> int:

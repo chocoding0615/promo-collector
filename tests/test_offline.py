@@ -220,3 +220,10 @@ def test_wikimedia_author_html_stripped():
         "extmetadata": {"Artist": {"value": '<a href="//commons.wikimedia.org/wiki/User:Basile_Morin" title="User:Basile Morin">Basile Morin</a>'},
                         "LicenseShortName": {"value": "CC BY-SA 4.0"}}}]}}}}
     assert wikimedia.parse_search(payload)[0].author == "Basile Morin"
+
+
+from collector.drive import phashes_from_memos  # noqa: E402
+
+def test_phashes_from_memos():
+    memos = [["메모"], ["자동수집(collector) · phash:d202886fbf153af1 · 등록:2026-11-26"], [], ["사진 직접 확인: ..."]]
+    assert phashes_from_memos(memos) == ["d202886fbf153af1"]
