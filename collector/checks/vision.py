@@ -22,8 +22,12 @@ NONPHOTO_LABELS = [
     "a cartoon or anime",
     "a screenshot or graphic poster with text",
 ]
-FACE_POS = "a photo that clearly shows one or more human faces up close"
-FACE_NEG = "a photo with no visible human face"
+# 얼굴: 3지 비교. 1순위가 '클로즈업 얼굴'일 때만 탈락(멀거나 작은 사람은 통과) — 기준 B
+FACE_LABELS = [
+    "a close-up portrait where a human face fills much of the frame",  # 0: 탈락 대상
+    "a scene where people appear small or far away",                    # 1: 통과
+    "a photo with no people at all",                                    # 2: 통과
+]
 TEXT_POS = "a graphic with large text, a logo, or a watermark"
 TEXT_NEG = "a clean photo without text, logo, or watermark"
 
@@ -67,13 +71,15 @@ def _softmax_first(a: float, b: float) -> float:
 
 def inspect(data: bytes, subject: str = "") -> VisionResult:
     img = Image.open(io.BytesIO(data)).convert("RGB")
-    # 사진 vs 그림/AI풍: 모든 라벨을 한 번에 비교
-    labels = PHOTO_LABELS + NONPHOTO_LABELS + [FACE_POS, FACE_NEG, TEXT_POS, TEXT_NEG]
+    # 사진 vs 그림/AI풍, 얼굴 3지, 글자 2지를 한 번에 비교
+    labels = PHOTO_LABELS + NONPHOTO_LABELS + FACE_LABELS + [TEXT_POS, TEXT_NEG]
     s = _sims(img, labels)
     i = 0
     photo = max(s[i:i + len(PHOTO_LABELS)]); i += len(PHOTO_LABELS)
     nonphoto = max(s[i:i + len(NONPHOTO_LABELS)]); i += len(NONPHOTO_LABELS)
-    face_pos, face_neg, text_pos, text_neg = s[i], s[i + 1], s[i + 2], s[i + 3]
+    face_s = s[i:i + len(FACE_LABELS)]; i += len(FACE_LABELS)
+    text_pos, text_neg = s[i], s[i + 1]
+    face = face_s.index(max(face_s)) == 0   # 클로즈업 얼굴이 1순위일 때만
     subject_score = 1.0
     if subject.strip():
         ss = _sims(img, [f"a photo of {subject}", "an unrelated photo"])
@@ -82,6 +88,6 @@ def inspect(data: bytes, subject: str = "") -> VisionResult:
         is_photo=photo >= nonphoto,
         photo_score=float(photo),
         subject_score=float(subject_score),
-        face=face_pos > face_neg,
+        face=face,
         has_text=text_pos > text_neg,
     )

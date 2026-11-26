@@ -161,3 +161,20 @@ def test_plan_only_uses_enabled_sources():
     # pixabay/openverse는 꺼져 있으니 지금은 모든 주제가 wikimedia로 감
     assert all(it["source"] == "wikimedia" for it in items)
     assert {it["category"] for it in items} >= {"travel", "cafe", "food", "animal"}
+
+
+# ---- 관리표 행 생성(순수 함수) ----
+from collector.drive import build_row  # noqa: E402
+
+def test_build_row_maps_columns():
+    meta = {"category": "travel", "subject": "경복궁", "source": "wikimedia",
+            "title": "Gyeongbokgung.jpg", "page_url": "https://commons/...", 
+            "author": "Hong", "license": "CC BY-SA 4.0", "phash": "abc123"}
+    row = build_row(meta, file_id="DRIVEID1")
+    assert len(row) == 14
+    assert row[0] == "DRIVEID1"          # A 파일 ID
+    assert row[2] == "travel"            # C 카테고리
+    assert row[4] == "경복궁"             # E 장소·주제
+    assert row[9] == "CC BY-SA 4.0"      # J 라이선스
+    assert row[10] == "사용 가능"         # K 상태(Promo가 쓰는 값)
+    assert "자동수집" in row[13] and "abc123" in row[13]  # N 메모

@@ -12,6 +12,7 @@
 from __future__ import annotations
 import argparse
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -59,7 +60,19 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path) ->
     from .checks import vision  # 모델 로드(무거움) — 실제 실행에서만
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    report = {"kept": 0, "rejected": 0, "reasons": {}, "by_source": {}}
+    report = {"kept": 0, "rejected": 0, "uploaded": 0, "reasons": {}, "by_source": {}}
+
+    # Drive 업로드(토큰 있을 때만). 없으면 out/ 저장만 하고 업로드 건너뜀.
+    from . import drive as drivemod
+    uploader = None
+    pending_rows: list[list[str]] = []
+    if drivemod.creds_available():
+        folder = os.environ.get("DRIVE_FOLDER_ID", "")
+        sheet = os.environ.get("SHEET_ID", "")
+        if folder and sheet:
+            uploader = drivemod.Uploader(folder, sheet)
+        else:
+            report.setdefault("errors", []).append("DRIVE_FOLDER_ID/SHEET_ID 비어 있음 → 업로드 생략")
 
     for it in items:
         src_name = it["source"]
@@ -102,16 +115,31 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path) ->
                     report["reasons"][r] = report["reasons"].get(r, 0) + 1
                 continue
             stem = f"{it['category']}_{hexh[:12]}"
-            (out_dir / f"{stem}.jpg").write_bytes(data)
-            (out_dir / f"{stem}.json").write_text(json.dumps({
+            meta = {
                 "category": it["category"], "subject": it["subject"], "source": c.source,
                 "source_id": c.source_id, "title": c.title, "page_url": c.page_url,
                 "author": c.author, "license": c.license, "phash": hexh,
                 "width": c.width, "height": c.height,
-            }, ensure_ascii=False, indent=2), encoding="utf-8")
+            }
+            (out_dir / f"{stem}.jpg").write_bytes(data)
+            (out_dir / f"{stem}.json").write_text(
+                json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
             report["kept"] += 1
             kept_for_item += 1
+            if uploader is not None:
+                try:
+                    fid = uploader.upload(data, f"{stem}.jpg")
+                    pending_rows.append(drivemod.build_row(meta, fid))
+                    report["uploaded"] += 1
+                except Exception as e:
+                    report.setdefault("errors", []).append(f"upload {stem}: {type(e).__name__}")
 
+    # 관리표 기록은 한 번에(시트 호출 최소화). 이미 쌓은 지문도 다음 실행 중복 방지용으로 저장.
+    if uploader is not None and pending_rows:
+        try:
+            uploader.append_rows(pending_rows)
+        except Exception as e:
+            report.setdefault("errors", []).append(f"append_rows: {type(e).__name__}")
     budget.save()
     report["at"] = datetime.now(timezone.utc).isoformat()
     (state_dir / "last_report.json").write_text(

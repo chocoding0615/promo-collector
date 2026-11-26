@@ -24,6 +24,14 @@ python -m collector.run --dry-run              # 어떤 주제를 어디서 몇 
   - 이유: 모델 다운로드·외부 접속이 개발 환경에서 막혀 있어, 열린 인터넷인 Actions에서 첫 검증
 
 ## Secrets (저장소 설정 → Secrets and variables → Actions)
-- `PIXABAY_KEY` — Pixabay API 키 (소량 수집 켤 때)
-- `GOOGLE_DRIVE_TOKEN` — Drive 업로드용 OAuth 토큰(본인 계정) *(다음 단계)*
-- `DRIVE_FOLDER_ID` — "Promo 자동 수집" 폴더 ID *(다음 단계)*
+- `GOOGLE_OAUTH` — socks398 계정의 Drive·Sheets 토큰 JSON. `scripts/make_token.py`로 한 번 생성
+- `DRIVE_FOLDER_ID` — "Promo 자동 수집" 폴더 ID (폴더 URL의 끝부분)
+- `SHEET_ID` — 관리표 스프레드시트 ID
+- `PIXABAY_KEY` — Pixabay API 키 (소량 수집 켤 때, 선택)
+
+토큰이 없으면 업로드를 건너뛰고 out/ 저장만 합니다(안전). 셋 다 넣으면 통과분을 Drive에 올리고
+관리표에 `상태=사용 가능`, 메모에 `자동수집(collector)`로 기록합니다.
+
+### Drive 토큰 만들기(한 번)
+`scripts/make_token.py` 맨 위 주석의 단계를 따라 Google Cloud에서 OAuth 클라이언트를 만들고,
+본인 컴퓨터에서 실행해 나온 JSON 한 줄을 `GOOGLE_OAUTH` 비밀값에 넣습니다.

@@ -43,8 +43,9 @@ jobs:
       - name: collect
         env:
           PIXABAY_KEY: ${{ secrets.PIXABAY_KEY }}
-          GOOGLE_DRIVE_TOKEN: ${{ secrets.GOOGLE_DRIVE_TOKEN }}
+          GOOGLE_OAUTH: ${{ secrets.GOOGLE_OAUTH }}
           DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
         run: |
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             python -m collector.run --dry-run
