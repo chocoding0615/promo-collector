@@ -199,3 +199,15 @@ def test_parse_oauth_rejects_code_without_leaking():
 def test_parse_oauth_missing_braces():
     body = '"client_id": "a", "client_secret": "b", "refresh_token": "c"'
     assert _parse_oauth(body)["refresh_token"] == "c"
+
+
+# ---- 관리표 기록 위치: 표 맨 아래 다음 줄 ----
+from collector.drive import next_free_row  # noqa: E402
+
+def test_next_free_row_after_last_data():
+    col = [[], ["Promo 이미지 보관함 관리표"], ["설명"], [], ["파일 ID"], ["id1"], ["id2"]]
+    assert next_free_row(col) == 8          # 7행이 마지막 → 8행부터
+
+def test_next_free_row_refuses_without_header():
+    with pytest.raises(ValueError):
+        next_free_row([["a"], ["b"]])

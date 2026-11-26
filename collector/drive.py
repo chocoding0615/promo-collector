@@ -105,13 +105,30 @@ class Uploader:
         return f["id"]
 
     def append_rows(self, rows: list[list[str]]) -> None:
+        """표 맨 아래 다음 줄부터 정확한 위치에 씀(행 삽입 없음).
+        예전 append(A1, INSERT_ROWS)는 맨 위에 줄을 끼워 넣어 표 전체를 밀었음 → 사용 금지."""
         if not rows:
             return
         _, sheets = self._services()
-        sheets.spreadsheets().values().append(
+        col = sheets.spreadsheets().values().get(
+            spreadsheetId=self.sheet_id, range=f"'{CATALOG_TAB}'!A1:A",
+        ).execute().get("values", [])
+        start = next_free_row(col)
+        end = start + len(rows) - 1
+        sheets.spreadsheets().values().update(
             spreadsheetId=self.sheet_id,
-            range=f"'{CATALOG_TAB}'!A1",
+            range=f"'{CATALOG_TAB}'!A{start}:N{end}",
             valueInputOption="RAW",
-            insertDataOption="INSERT_ROWS",
             body={"values": rows},
         ).execute()
+
+
+def next_free_row(col_a: list[list[str]]) -> int:
+    """A열 값(위에서부터) → 마지막으로 값이 있는 줄 다음 줄 번호(1부터). 머리줄('파일 ID')이 없으면 거부."""
+    if not any(r and "파일 ID" in str(r[0]) for r in col_a):
+        raise ValueError("관리표에서 '파일 ID' 머리줄을 찾지 못해 기록을 멈춤(표 위치를 확인해 주세요)")
+    last = 0
+    for i, r in enumerate(col_a, start=1):
+        if r and str(r[0]).strip():
+            last = i
+    return last + 1
