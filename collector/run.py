@@ -134,7 +134,7 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, ma
                     pending_rows.append(drivemod.build_row(meta, fid))
                     report["uploaded"] += 1
                 except Exception as e:
-                    report.setdefault("errors", []).append(f"upload {stem}: {type(e).__name__}")
+                    report.setdefault("errors", []).append(f"upload {stem}: {type(e).__name__}: {str(e)[:160]}")
 
     # 관리표 기록은 한 번에(시트 호출 최소화). 이미 쌓은 지문도 다음 실행 중복 방지용으로 저장.
     if uploader is not None and pending_rows:

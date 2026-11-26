@@ -25,9 +25,23 @@ def creds_available() -> bool:
     return bool(os.environ.get("GOOGLE_OAUTH"))
 
 
+def _parse_oauth(raw: str) -> dict:
+    """붙여넣기 실수(앞뒤 공백·따옴표·안내 문구)를 걸러 {...} 부분만 읽음. 값은 절대 출력하지 않음."""
+    s = (raw or "").strip().strip("'\"")
+    a, b = s.find("{"), s.rfind("}")
+    if a == -1 or b <= a:
+        raise ValueError(f"GOOGLE_OAUTH 모양이 JSON이 아님(길이 {len(s)}, '{{' 없음) — "
+                         "make_token.py가 출력한 {{\"client_id\": ...}} 한 줄 전체를 넣어 주세요")
+    cfg = json.loads(s[a:b + 1])
+    missing = [k for k in ("client_id", "client_secret", "refresh_token") if not cfg.get(k)]
+    if missing:
+        raise ValueError(f"GOOGLE_OAUTH에 빠진 항목: {', '.join(missing)}")
+    return cfg
+
+
 def _credentials():
     from google.oauth2.credentials import Credentials
-    cfg = json.loads(os.environ["GOOGLE_OAUTH"])
+    cfg = _parse_oauth(os.environ["GOOGLE_OAUTH"])
     return Credentials(
         token=None,
         refresh_token=cfg["refresh_token"],

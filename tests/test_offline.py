@@ -178,3 +178,20 @@ def test_build_row_maps_columns():
     assert row[9] == "CC BY-SA 4.0"      # J 라이선스
     assert row[10] == "사용 가능"         # K 상태(Promo가 쓰는 값)
     assert "자동수집" in row[13] and "abc123" in row[13]  # N 메모
+
+
+# ---- GOOGLE_OAUTH 붙여넣기 실수 허용 ----
+from collector.drive import _parse_oauth  # noqa: E402
+
+def test_parse_oauth_tolerates_paste_noise():
+    good = '{"client_id": "a", "client_secret": "b", "refresh_token": "c"}'
+    assert _parse_oauth(good)["refresh_token"] == "c"
+    assert _parse_oauth("  '" + good + "'\n")["client_id"] == "a"
+    assert _parse_oauth("=== 아래 한 줄 ===\n" + good)["client_secret"] == "b"
+
+def test_parse_oauth_rejects_code_without_leaking():
+    with pytest.raises(ValueError) as e:
+        _parse_oauth("4/0AUn6Hd_secretlookingcode")
+    assert "secretlookingcode" not in str(e.value)   # 값은 오류에 안 나옴
+    with pytest.raises(ValueError):
+        _parse_oauth('{"client_id": "a"}')
