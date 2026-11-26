@@ -1,0 +1,45 @@
+# promo-collector 설정
+# 출처별 하루 한도와 카테고리별 수집 목표. 숫자는 시범 뒤 조정합니다.
+
+sources:
+  wikimedia:
+    enabled: true
+    daily_limit: 3000      # 자유 이용. 대량 가능
+    per_query: 50          # 검색어 한 번에 받을 최대 수
+  pixabay:
+    enabled: false         # 키를 비밀값에 넣고 켜기. 대량 금지 → 소량만
+    daily_limit: 300
+    per_query: 20
+    min_interval_sec: 1    # 요청 간 최소 간격(분당 100회 한도 안)
+  openverse:
+    enabled: false         # 검색해서 고른 것만. 대량 금지
+    daily_limit: 300
+    per_query: 20
+
+# 카테고리별 수집 목표. 자동 제작이 "사진 없음"으로 멈춘 주제는 needs.yaml에 쌓여 우선 수집됩니다.
+categories:
+  travel:
+    targets: ["경복궁", "불국사", "성산일출봉", "남산서울타워", "해운대"]
+    source_order: [wikimedia, openverse]
+    need: 5                # 주제당 목표 장수
+  cafe:
+    targets: ["아늑한 카페 인테리어", "원목 카페", "창가 커피"]
+    source_order: [pixabay, openverse, wikimedia]
+    need: 10
+  food:
+    targets: ["한식 백반", "파스타", "디저트 플레이팅"]
+    source_order: [pixabay, wikimedia, openverse]
+    need: 10
+  animal:
+    targets: ["강아지", "고양이", "길고양이"]
+    source_order: [pixabay, wikimedia, openverse]
+    need: 10
+
+# 검사 기준(1단계, 오픈소스). 통과해야 Drive·관리표로 갑니다.
+checks:
+  dedup_max_distance: 5    # 지문 거리 이 값 이하이면 중복으로 봄
+  allow_faces: false       # 얼굴 있으면 탈락(실존 인물·초상권)
+  max_text_ratio: 0.08     # 글자가 이 비율 넘게 차지하면 탈락(로고·워터마크)
+  require_photo: true      # 그림·삽화·AI풍이면 탈락
+  min_subject_score: 0.22  # CLIP 주제 일치 최소 점수
+  min_long_side: 1000      # 너무 작은 사진 탈락(픽셀)

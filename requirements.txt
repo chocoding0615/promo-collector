@@ -1,0 +1,15 @@
+# 수집·설정·중복(로컬에서 시험됨)
+Pillow
+imagehash
+pyyaml
+requests
+
+# 검사 모델(Actions 첫 실행에서 내려받아 검증)
+open_clip_torch
+torch
+opencv-python-headless
+numpy
+
+# Drive 업로드(다음 단계)
+google-api-python-client
+google-auth
