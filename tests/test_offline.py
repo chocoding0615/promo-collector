@@ -195,3 +195,7 @@ def test_parse_oauth_rejects_code_without_leaking():
     assert "secretlookingcode" not in str(e.value)   # 값은 오류에 안 나옴
     with pytest.raises(ValueError):
         _parse_oauth('{"client_id": "a"}')
+
+def test_parse_oauth_missing_braces():
+    body = '"client_id": "a", "client_secret": "b", "refresh_token": "c"'
+    assert _parse_oauth(body)["refresh_token"] == "c"

@@ -27,11 +27,16 @@ def creds_available() -> bool:
 
 def _parse_oauth(raw: str) -> dict:
     """붙여넣기 실수(앞뒤 공백·따옴표·안내 문구)를 걸러 {...} 부분만 읽음. 값은 절대 출력하지 않음."""
-    s = (raw or "").strip().strip("'\"")
+    s = (raw or "").strip()
+    if "{" not in s and '"client_id"' in s:
+        # 중괄호만 빠지고 복사된 경우: 감싸서 읽음
+        s = "{" + s.strip().strip(",").rstrip("}") + "}"
+    s = s.strip("'")
     a, b = s.find("{"), s.rfind("}")
     if a == -1 or b <= a:
-        raise ValueError(f"GOOGLE_OAUTH 모양이 JSON이 아님(길이 {len(s)}, '{{' 없음) — "
-                         "make_token.py가 출력한 {{\"client_id\": ...}} 한 줄 전체를 넣어 주세요")
+        has = [k for k in ("client_id", "client_secret", "refresh_token") if k in s]
+        raise ValueError(f"GOOGLE_OAUTH 모양이 JSON이 아님(길이 {len(s)}, 중괄호 없음, 들어있는 항목 이름: "
+                         f"{has or '없음'}) — make_token.py가 출력한 {{ 부터 }} 까지 한 줄 전체를 넣어 주세요")
     cfg = json.loads(s[a:b + 1])
     missing = [k for k in ("client_id", "client_secret", "refresh_token") if not cfg.get(k)]
     if missing:
