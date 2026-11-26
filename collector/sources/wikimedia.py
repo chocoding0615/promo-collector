@@ -42,9 +42,13 @@ def build_search_params(query: str, per_query: int) -> dict[str, Any]:
 
 
 def _ext(meta: dict[str, Any], key: str) -> str:
+    """extmetadata 값. 작가 칸 등에 섞인 HTML 태그(<a href=...>)를 걷어내고 글자만."""
+    import html
+    import re
     v = (meta or {}).get(key)
     if isinstance(v, dict):
-        return str(v.get("value", "")).strip()
+        t = re.sub(r"<[^>]+>", "", str(v.get("value", "")))
+        return re.sub(r"\s+", " ", html.unescape(t)).strip()
     return ""
 
 

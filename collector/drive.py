@@ -19,6 +19,9 @@ SCOPES = [
 ]
 # 관리표 A~N: 파일ID, 파일명, 카테고리, 세부구분, 장소·주제, 태그, 출처사이트, 원본URL, 작가, 라이선스, 상태, 최근사용계정, 최근사용일, 메모
 CATALOG_TAB = "이미지 관리"
+# 관리표의 기존 카테고리 이름(한글)에 맞춤. Promo가 한글 카테고리로 찾기 때문
+CATEGORY_KO = {"travel": "여행", "cafe": "카페·음식·공간", "food": "카페·음식·공간", "animal": "반려동물"}
+SOURCE_NAME = {"wikimedia": "Wikimedia Commons", "pixabay": "Pixabay", "openverse": "Openverse"}
 
 
 def creds_available() -> bool:
@@ -64,11 +67,11 @@ def build_row(meta: dict[str, Any], file_id: str, account_note: str = "자동수
     return [
         file_id,                                   # A 파일 ID
         meta.get("title", ""),                     # B 파일명
-        meta.get("category", ""),                  # C 카테고리
+        CATEGORY_KO.get(meta.get("category", ""), meta.get("category", "")),  # C 카테고리(한글)
         "자동 수집",                                # D 세부 구분
         meta.get("subject", ""),                   # E 장소·주제
         tags,                                      # F 태그
-        meta.get("source", ""),                    # G 출처 사이트
+        SOURCE_NAME.get(meta.get("source", ""), meta.get("source", "")),      # G 출처 사이트
         meta.get("page_url", ""),                  # H 원본 URL
         meta.get("author", ""),                    # I 작가
         meta.get("license", ""),                   # J 라이선스

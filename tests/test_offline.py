@@ -173,7 +173,8 @@ def test_build_row_maps_columns():
     row = build_row(meta, file_id="DRIVEID1")
     assert len(row) == 14
     assert row[0] == "DRIVEID1"          # A 파일 ID
-    assert row[2] == "travel"            # C 카테고리
+    assert row[2] == "여행"              # C 카테고리(한글)
+    assert row[6] == "Wikimedia Commons" # G 출처 사이트
     assert row[4] == "경복궁"             # E 장소·주제
     assert row[9] == "CC BY-SA 4.0"      # J 라이선스
     assert row[10] == "사용 가능"         # K 상태(Promo가 쓰는 값)
@@ -211,3 +212,11 @@ def test_next_free_row_after_last_data():
 def test_next_free_row_refuses_without_header():
     with pytest.raises(ValueError):
         next_free_row([["a"], ["b"]])
+
+
+def test_wikimedia_author_html_stripped():
+    payload = {"query": {"pages": {"1": {"title": "File:a.jpg", "imageinfo": [{
+        "url": "u", "mime": "image/jpeg", "width": 1600, "height": 900, "descriptionurl": "d",
+        "extmetadata": {"Artist": {"value": '<a href="//commons.wikimedia.org/wiki/User:Basile_Morin" title="User:Basile Morin">Basile Morin</a>'},
+                        "LicenseShortName": {"value": "CC BY-SA 4.0"}}}]}}}}
+    assert wikimedia.parse_search(payload)[0].author == "Basile Morin"
