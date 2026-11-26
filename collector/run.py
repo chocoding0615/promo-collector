@@ -90,7 +90,7 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path) ->
             v = vision.inspect(data, subject=it["subject"])
             verdict = decide(cfg.checks, long_side=max(c.width, c.height),
                              is_photo=v.is_photo, subject_score=v.subject_score,
-                             face=v.face, text_ratio=v.text_ratio, is_duplicate=is_dup)
+                             face=v.face, has_text=v.has_text, is_duplicate=is_dup)
             if not verdict.ok:
                 report["rejected"] += 1
                 for r in verdict.reasons:

@@ -27,7 +27,6 @@ class CategoryCfg:
 class ChecksCfg:
     dedup_max_distance: int = 5
     allow_faces: bool = False
-    max_text_ratio: float = 0.08
     require_photo: bool = True
     min_subject_score: float = 0.22
     min_long_side: int = 1000

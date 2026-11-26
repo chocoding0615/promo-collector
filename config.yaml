@@ -39,7 +39,6 @@ categories:
 checks:
   dedup_max_distance: 5    # 지문 거리 이 값 이하이면 중복으로 봄
   allow_faces: false       # 얼굴 있으면 탈락(실존 인물·초상권)
-  max_text_ratio: 0.08     # 글자가 이 비율 넘게 차지하면 탈락(로고·워터마크)
   require_photo: true      # 그림·삽화·AI풍이면 탈락
   min_subject_score: 0.22  # CLIP 주제 일치 최소 점수
   min_long_side: 1000      # 너무 작은 사진 탈락(픽셀)

@@ -7,7 +7,6 @@ requests
 # 검사 모델(Actions 첫 실행에서 내려받아 검증)
 open_clip_torch
 torch
-opencv-python-headless
 numpy
 
 # Drive 업로드(다음 단계)

@@ -136,23 +136,23 @@ def _checks():
 
 def test_decide_passes_clean_photo():
     v = decide(_checks(), long_side=1600, is_photo=True, subject_score=0.4,
-               face=False, text_ratio=0.01, is_duplicate=False)
+               face=False, has_text=False, is_duplicate=False)
     assert v.ok and v.reasons == []
 
 def test_decide_rejects_each_reason():
     c = _checks()
     assert "중복" in decide(c, long_side=1600, is_photo=True, subject_score=0.4,
-                            face=False, text_ratio=0.0, is_duplicate=True).reasons
+                            face=False, has_text=False, is_duplicate=True).reasons
     assert any("작음" in r for r in decide(c, long_side=400, is_photo=True, subject_score=0.4,
-                            face=False, text_ratio=0.0, is_duplicate=False).reasons)
+                            face=False, has_text=False, is_duplicate=False).reasons)
     assert any("사진 아님" in r for r in decide(c, long_side=1600, is_photo=False, subject_score=0.4,
-                            face=False, text_ratio=0.0, is_duplicate=False).reasons)
+                            face=False, has_text=False, is_duplicate=False).reasons)
     assert any("얼굴" in r for r in decide(c, long_side=1600, is_photo=True, subject_score=0.4,
-                            face=True, text_ratio=0.0, is_duplicate=False).reasons)
+                            face=True, has_text=False, is_duplicate=False).reasons)
     assert any("글자" in r for r in decide(c, long_side=1600, is_photo=True, subject_score=0.4,
-                            face=False, text_ratio=0.5, is_duplicate=False).reasons)
+                            face=False, has_text=True, is_duplicate=False).reasons)
     assert any("주제" in r for r in decide(c, long_side=1600, is_photo=True, subject_score=0.05,
-                            face=False, text_ratio=0.0, is_duplicate=False).reasons)
+                            face=False, has_text=False, is_duplicate=False).reasons)
 
 def test_plan_only_uses_enabled_sources():
     cfg = config.load(ROOT / "config.yaml")
