@@ -191,7 +191,44 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "wish|광화문": {
+   "kept": 6,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "wish|경복궁 경회루": {
+   "kept": 6,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "여행|덕수궁": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "카페·음식·공간|핸드드립 커피": {
+   "kept": 40,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "반려동물|아기 고양이": {
+   "kept": 14,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 26
+ "rr": 29
 }

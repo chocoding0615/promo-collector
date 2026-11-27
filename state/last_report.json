@@ -1,28 +1,27 @@
 {
-  "kept": 142,
-  "rejected": 142,
-  "uploaded": 142,
+  "kept": 96,
+  "rejected": 47,
+  "uploaded": 96,
   "reasons": {
-    "그림·삽화·AI풍": 125,
-    "중복": 5,
-    "얼굴 있음": 8,
-    "너무 작음": 43,
-    "글자·로고·워터마크": 14
+    "그림·삽화·AI풍": 30,
+    "너무 작음": 6,
+    "얼굴 있음": 15,
+    "글자·로고·워터마크": 1
   },
   "by_source": {
-    "wikimedia": 250,
-    "pixabay": 21,
-    "openverse": 13
+    "wikimedia": 125,
+    "pixabay": 11,
+    "openverse": 7
   },
   "kept_by_source": {
-    "wikimedia": 120,
-    "pixabay": 13,
-    "openverse": 9
+    "wikimedia": 88,
+    "pixabay": 6,
+    "openverse": 2
   },
   "caps": {
-    "wikimedia": 250,
-    "pixabay": 21,
-    "openverse": 13
+    "wikimedia": 125,
+    "pixabay": 11,
+    "openverse": 7
   },
   "skipped_sources": [],
   "policy_changes": [],
@@ -34,14 +33,19 @@
     "너무 작음": 0,
     "주제와 약함": 0
   },
+  "wishes": 2,
+  "wish_status": {
+    "Gwanghwamun": "완료(6)",
+    "Gyeonghoeru": "완료(6)"
+  },
   "reject_samples": [
-    "그림·삽화·AI풍",
-    "너무 작음"
+    "얼굴 있음",
+    "그림·삽화·AI풍"
   ],
   "took": {
-    "wikimedia": 250,
-    "pixabay": 21,
-    "openverse": 13
+    "wikimedia": 125,
+    "pixabay": 11,
+    "openverse": 7
   },
-  "at": "2026-11-27T04:56:07.779229+00:00"
+  "at": "2026-11-27T05:51:02.942007+00:00"
 }
