@@ -396,3 +396,9 @@ def test_config_wish_need_and_half_cap():
     cfg = config.load(str(Path(__file__).resolve().parents[1] / "config.yaml"))
     assert cfg.wish_need == 6 and cfg.runs_per_day == 48
     assert cfg.run_cap("wikimedia", 0) == 125
+
+
+def test_grid_rows_to_add():
+    from collector.drive import grid_rows_to_add
+    assert grid_rows_to_add(1202, 1202) == 0
+    assert grid_rows_to_add(1202, 1210) == 508

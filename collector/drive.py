@@ -125,12 +125,32 @@ class Uploader:
         ).execute().get("values", [])
         start = next_free_row(col)
         end = start + len(rows) - 1
+        ensure_grid_rows(sheets, self.sheet_id, CATALOG_TAB, end)
         sheets.spreadsheets().values().update(
             spreadsheetId=self.sheet_id,
             range=f"'{CATALOG_TAB}'!A{start}:N{end}",
             valueInputOption="RAW",
             body={"values": rows},
         ).execute()
+
+
+def grid_rows_to_add(row_count: int, last_row: int, spare: int = 500) -> int:
+    """표 칸 수(rowCount)가 쓸 마지막 줄보다 적으면 늘릴 줄 수(여유 500줄). 순수 함수."""
+    return 0 if last_row <= row_count else last_row - row_count + spare
+
+
+def ensure_grid_rows(sheets, sheet_id: str, tab: str, last_row: int) -> None:
+    """시트 칸이 모자라면 아래에 빈 줄을 덧붙임(기존 줄은 그대로). 칸을 넘겨 쓰면 400 오류가 남."""
+    meta = sheets.spreadsheets().get(spreadsheetId=sheet_id, fields="sheets.properties(sheetId,title,gridProperties.rowCount)").execute()
+    for sh in meta.get("sheets", []):
+        pr = sh["properties"]
+        if pr["title"] != tab:
+            continue
+        add = grid_rows_to_add(pr["gridProperties"]["rowCount"], last_row)
+        if add:
+            sheets.spreadsheets().batchUpdate(spreadsheetId=sheet_id, body={"requests": [
+                {"appendDimension": {"sheetId": pr["sheetId"], "dimension": "ROWS", "length": add}}]}).execute()
+        return
 
 
 def phashes_from_memos(memos: list[list[str]]) -> list[str]:
@@ -255,6 +275,7 @@ class RejectStore:
             if r and str(r[0]).strip():
                 start = max(2, i + 1)
         end = start + len(rows) - 1
+        ensure_grid_rows(sheets, self.up.sheet_id, REJECT_TAB, end)
         sheets.spreadsheets().values().update(
             spreadsheetId=self.up.sheet_id, range=f"'{REJECT_TAB}'!A{start}:K{end}",
             valueInputOption="RAW", body={"values": rows}).execute()
