@@ -27,6 +27,7 @@ from .sources import SOURCES
 
 ROOT = Path(__file__).resolve().parents[1]
 REJECT_PER_DAY = 20     # 탈락 샘플 하루 최대
+WISHES_PER_RUN = 20     # 수집 요청 한 회차 최대(과다 요청 방지)
 REJECT_PER_RUN = 2      # 한 번 실행에 최대
 
 
@@ -134,7 +135,7 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, ma
     wish_items = []
     if uploader is not None:
         try:
-            for w in wishmod.parse(uploader.wish_values()):
+            for w in wishmod.parse(uploader.wish_values())[:WISHES_PER_RUN]:  # 한 회차 최대 20곳, 나머지는 다음 회차
                 en, memo = (w["en"], "") if w["en"] else wishmod.english_name(w["place"], session)
                 cat = cfg.categories.get(w["category"])
                 order = cat.source_order if cat else ["wikimedia", "openverse"]

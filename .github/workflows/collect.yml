@@ -1,7 +1,8 @@
 name: collect
 
 # 예약 실행 + 수동 실행 + 이어달리기. 공개 저장소라 사용 시간 무제한.
-# GitHub 예약(cron)은 자주 건너뛰어서, 실행이 끝나면 시작 30분 뒤에 다음 실행을 스스로 시작함.
+# GitHub 예약(cron)은 자주 건너뛰어서, 실행이 끝나면 tick 워크플로가 시작 30분 뒤에 다음 실행을 시작함.
+# Promo는 사진이 빈 장이 생기면 이 워크플로를 바로 실행함(사용자 결정 A안, 최소 5분 간격).
 # cron은 끊겼을 때 다시 잇는 예비용. 이미 대기·실행 중인 다른 실행이 있으면 이어달리기를 안 걸어 두 줄로 갈라지지 않음.
 on:
   schedule:
@@ -28,7 +29,7 @@ permissions:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 50     # 수집은 22분에서 멈추고, 남는 시간은 30분 간격 맞추기 대기
+    timeout-minutes: 35     # 수집은 22분에서 멈춤(30분 간격 맞추기 대기는 tick 워크플로가 함)
     steps:
       - name: start time
         run: echo "STARTED=$(date +%s)" >> "$GITHUB_ENV"
@@ -72,16 +73,12 @@ jobs:
           git commit -q -m "state: $(date -u +%F_%H:%M)" || { echo "변경 없음"; exit 0; }
           for i in 1 2 3; do git pull -q --rebase origin main && git push -q && break || sleep 5; done
 
-      # 이어달리기: 시작 후 30분이 되면 다음 실행 시작. 시험 실행(dry_run·max_keep)은 잇지 않음.
+      # 이어달리기: 다음 실행 예약은 별도 워크플로(tick)가 30분을 기다려 시작함.
+      # 이 실행 안에서 기다리면 Promo가 바로 깨운 실행이 그동안 줄만 서 있게 되므로 여기서는 기다리지 않음.
       - name: chain next run
         if: ${{ !cancelled() && inputs.dry_run != true && (inputs.max_keep || 0) == 0 }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          wait=$(( STARTED + 1800 - $(date +%s) ))
-          [ "$wait" -gt 0 ] && { echo "다음 실행까지 ${wait}초 대기"; sleep "$wait"; }
-          others=$(gh api "repos/${{ github.repository }}/actions/workflows/collect.yml/runs?per_page=20" \
-            --jq "[.workflow_runs[] | select(.id != ${{ github.run_id }}) | select(.status != \"completed\")] | length")
-          if [ "$others" -gt 0 ]; then echo "이미 대기·실행 중인 실행 ${others}개 → 이어달리기 생략"; exit 0; fi
-          gh api -X POST "repos/${{ github.repository }}/actions/workflows/collect.yml/dispatches" -f ref=main
-          echo "다음 실행 시작함"
+          gh api -X POST "repos/${{ github.repository }}/actions/workflows/tick.yml/dispatches" -f ref=main -f "inputs[started]=$STARTED"
+          echo "다음 실행 예약(tick) 걸어 둠"

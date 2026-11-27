@@ -1,0 +1,35 @@
+name: tick
+
+# 수집기 이어달리기용 타이머. collect가 끝나며 이걸 실행 → 시작 30분 뒤가 되면 collect를 다시 시작.
+# 타이머는 하나만 살아 있게(새 타이머가 오면 이전 것은 취소). collect가 이미 돌거나 줄 서 있으면 시작하지 않음.
+on:
+  workflow_dispatch:
+    inputs:
+      started:
+        description: "직전 collect 시작 시각(epoch 초)"
+        required: true
+
+concurrency:
+  group: tick
+  cancel-in-progress: true
+
+permissions:
+  actions: write
+
+jobs:
+  wait-and-start:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: wait then start collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STARTED: ${{ inputs.started }}
+        run: |
+          wait=$(( STARTED + 1800 - $(date +%s) ))
+          [ "$wait" -gt 0 ] && { echo "다음 실행까지 ${wait}초 대기"; sleep "$wait"; }
+          busy=$(gh api "repos/${{ github.repository }}/actions/workflows/collect.yml/runs?per_page=20" \
+            --jq '[.workflow_runs[] | select(.status != "completed")] | length')
+          if [ "$busy" -gt 0 ]; then echo "collect가 이미 돌거나 줄 서 있음(${busy}) → 생략"; exit 0; fi
+          gh api -X POST "repos/${{ github.repository }}/actions/workflows/collect.yml/dispatches" -f ref=main
+          echo "collect 시작함"
