@@ -685,7 +685,37 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "건강·운동|건강한 샐러드": {
+   "kept": 14,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 13
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|회의실": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "문화·취미·전시|피아노": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "비즈니스·경제|지폐": {
+   "kept": 0,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 84
+ "rr": 88
 }
