@@ -738,7 +738,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "여행|롯데월드타워": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "카페·음식·공간|크루아상": {
+   "kept": 36,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "반려동물|말티즈": {
+   "kept": 14,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 91
+ "rr": 94
 }
