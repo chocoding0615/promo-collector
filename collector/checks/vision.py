@@ -39,6 +39,10 @@ class VisionResult:
     subject_score: float   # 요청 주제와의 일치(0~1), 주제 없으면 1.0
     face: bool
     has_text: bool
+    # 기준 완화용 여유값(양수일수록 해당 판정이 확실). 정책 단계에 따라 경계를 옮길 때 씀
+    photo_margin: float = 0.0   # 사진 - 그림  (>=0 이면 사진)
+    face_margin: float = 0.0    # 클로즈업얼굴 - 나머지 최대 (>0 이면 얼굴 탈락)
+    text_margin: float = 0.0    # 글자 - 깨끗 (>0 이면 글자 탈락)
 
 
 @lru_cache(maxsize=1)
@@ -90,4 +94,7 @@ def inspect(data: bytes, subject: str = "") -> VisionResult:
         subject_score=float(subject_score),
         face=face,
         has_text=text_pos > text_neg,
+        photo_margin=float(photo - nonphoto),
+        face_margin=float(face_s[0] - max(face_s[1:])),
+        text_margin=float(text_pos - text_neg),
     )

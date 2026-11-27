@@ -152,3 +152,109 @@ def next_free_row(col_a: list[list[str]]) -> int:
         if r and str(r[0]).strip():
             last = i
     return last + 1
+
+
+# ── 탈락 샘플 ──────────────────────────────────────────────
+REJECT_TAB = "탈락 샘플"
+REJECT_FOLDER = "탈락 샘플"
+REJECT_HEADER = ["기록 시각(UTC)", "파일 ID", "보기", "카테고리", "주제", "출처", "원본 URL",
+                 "탈락 이유", "점수", "판정(오판/정상)", "메모"]
+
+
+def build_reject_row(meta: dict[str, Any], file_id: str, reason: str, scores: str, at_iso: str) -> list[str]:
+    """탈락 샘플 한 줄(A~K). 판정(J)·메모(K)는 안티그래피티가 채움."""
+    return [
+        at_iso,
+        file_id,
+        f"https://drive.google.com/file/d/{file_id}/view" if file_id else "",
+        CATEGORY_KO.get(meta.get("category", ""), meta.get("category", "")),
+        meta.get("subject", ""),
+        SOURCE_NAME.get(meta.get("source", ""), meta.get("source", "")),
+        meta.get("page_url", ""),
+        reason,
+        scores,
+        "",
+        "",
+    ]
+
+
+def parse_judgments(values: list[list[str]]) -> list[dict]:
+    """탈락 샘플 탭 A2:J → [{'at','reason','verdict'}]. 빈 줄은 건너뜀."""
+    out = []
+    for r in values:
+        r = list(r) + [""] * (10 - len(r))
+        if not str(r[0]).strip():
+            continue
+        out.append({"at": str(r[0]).strip(), "reason": str(r[7]).strip(), "verdict": str(r[9]).strip()})
+    return out
+
+
+class RejectStore:
+    """탈락 샘플을 Drive '탈락 샘플' 폴더와 관리표 '탈락 샘플' 탭에 기록. 기존 탭·행은 건드리지 않음."""
+
+    def __init__(self, uploader: "Uploader"):
+        self.up = uploader
+        self._folder = None
+        self._tab_ready = False
+
+    def folder_id(self) -> str:
+        if self._folder:
+            return self._folder
+        drive, _ = self.up._services()
+        q = (f"name = '{REJECT_FOLDER}' and mimeType = 'application/vnd.google-apps.folder' "
+             f"and '{self.up.folder_id}' in parents and trashed = false")
+        found = drive.files().list(q=q, fields="files(id)", pageSize=1).execute().get("files", [])
+        if found:
+            self._folder = found[0]["id"]
+        else:
+            self._folder = drive.files().create(
+                body={"name": REJECT_FOLDER, "mimeType": "application/vnd.google-apps.folder",
+                      "parents": [self.up.folder_id]}, fields="id").execute()["id"]
+        return self._folder
+
+    def ensure_tab(self) -> None:
+        if self._tab_ready:
+            return
+        _, sheets = self.up._services()
+        meta = sheets.spreadsheets().get(spreadsheetId=self.up.sheet_id,
+                                         fields="sheets.properties.title").execute()
+        titles = [s["properties"]["title"] for s in meta.get("sheets", [])]
+        if REJECT_TAB not in titles:
+            sheets.spreadsheets().batchUpdate(spreadsheetId=self.up.sheet_id, body={
+                "requests": [{"addSheet": {"properties": {"title": REJECT_TAB,
+                                                          "gridProperties": {"frozenRowCount": 1}}}}]
+            }).execute()
+            sheets.spreadsheets().values().update(
+                spreadsheetId=self.up.sheet_id, range=f"'{REJECT_TAB}'!A1:K1",
+                valueInputOption="RAW", body={"values": [REJECT_HEADER]}).execute()
+        self._tab_ready = True
+
+    def judgments(self) -> list[dict]:
+        self.ensure_tab()
+        _, sheets = self.up._services()
+        vals = sheets.spreadsheets().values().get(
+            spreadsheetId=self.up.sheet_id, range=f"'{REJECT_TAB}'!A2:J").execute().get("values", [])
+        return parse_judgments(vals)
+
+    def upload(self, data: bytes, name: str) -> str:
+        from googleapiclient.http import MediaInMemoryUpload
+        drive, _ = self.up._services()
+        media = MediaInMemoryUpload(data, mimetype="image/jpeg", resumable=False)
+        return drive.files().create(body={"name": name, "parents": [self.folder_id()]},
+                                    media_body=media, fields="id").execute()["id"]
+
+    def write_rows(self, rows: list[list[str]]) -> None:
+        if not rows:
+            return
+        self.ensure_tab()
+        _, sheets = self.up._services()
+        col = sheets.spreadsheets().values().get(
+            spreadsheetId=self.up.sheet_id, range=f"'{REJECT_TAB}'!A1:A").execute().get("values", [])
+        start = max(2, sum(1 for _ in col) + 1)
+        for i, r in enumerate(col, start=1):   # 마지막 값 있는 줄 다음
+            if r and str(r[0]).strip():
+                start = max(2, i + 1)
+        end = start + len(rows) - 1
+        sheets.spreadsheets().values().update(
+            spreadsheetId=self.up.sheet_id, range=f"'{REJECT_TAB}'!A{start}:K{end}",
+            valueInputOption="RAW", body={"values": rows}).execute()

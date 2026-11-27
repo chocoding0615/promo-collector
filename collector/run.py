@@ -20,10 +20,19 @@ from pathlib import Path
 from . import config, ratelimit
 from .checks.dedup import Deduper
 from .pipeline import decide
+from . import policy as policymod
 from .progress import Progress, rotate
 from .sources import SOURCES
 
 ROOT = Path(__file__).resolve().parents[1]
+REJECT_PER_DAY = 20     # 탈락 샘플 하루 최대
+REJECT_PER_RUN = 2      # 한 번 실행에 최대
+
+
+def pick_samples(cands: dict[str, dict], by_reason_today: dict[str, int], n: int) -> list[dict]:
+    """이유별 후보 1장씩 중 오늘 적게 저장된 이유부터 n장(이유가 골고루 섞이게)."""
+    order = sorted(cands, key=lambda r: (by_reason_today.get(r, 0), r))
+    return [cands[r] for r in order[:max(0, n)]]
 
 
 def subjects(cfg: config.Config) -> list[dict]:
@@ -102,6 +111,21 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, ma
         else:
             err("DRIVE_FOLDER_ID/SHEET_ID 비어 있음 → 업로드 생략")
 
+    pol = policymod.Policy(state_dir / "policy.json")
+    now_iso = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    rejects = None
+    if uploader is not None:
+        rejects = drivemod.RejectStore(uploader)
+        try:
+            js = rejects.judgments()
+            report["policy_changes"] = policymod.evaluate(js, pol, now_iso)
+            report["error_rates"] = policymod.error_rates(js, pol)
+        except Exception as e:
+            err(f"judgments: {type(e).__name__}: {str(e)[:120]}")
+    levels = pol.levels()
+    report["policy_levels"] = levels
+    sample_cands: dict[str, dict] = {}   # 이유 → 이번 실행 후보 1장
+
     def left(src):  # 이번 실행에서 이 출처가 더 받을 수 있나
         return took.get(src, 0) < caps.get(src, 0)
 
@@ -150,14 +174,23 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, ma
                 report["by_source"][src] = report["by_source"].get(src, 0) + 1
                 is_dup, hexh = deduper.check_bytes(data)
                 v = vision.inspect(data, subject=en)
-                verdict = decide(cfg.checks, long_side=max(w, h), is_photo=v.is_photo,
-                                 subject_score=v.subject_score, face=v.face, has_text=v.has_text,
-                                 is_duplicate=is_dup)
+                flags, checks_now = policymod.judge(v, levels, cfg.checks)
+                verdict = decide(checks_now, long_side=max(w, h), is_duplicate=is_dup, **flags)
                 if not verdict.ok:
                     report["rejected"] += 1
-                    for r in verdict.reasons:
-                        r = r.split("(")[0]   # 이유별 집계(숫자 빼고)
+                    keys = [policymod.reason_key(r) for r in verdict.reasons]
+                    for r in keys:
                         report["reasons"][r] = report["reasons"].get(r, 0) + 1
+                    # 샘플 후보: 이유가 하나뿐인 탈락만(오판 판정이 어느 기준 탓인지 분명하게), 중복 제외
+                    if len(keys) == 1 and keys[0] in policymod.RELAX and keys[0] not in sample_cands:
+                        sample_cands[keys[0]] = {
+                            "data": data, "reason": verdict.reasons[0], "key": keys[0],
+                            "meta": {"category": it["category"], "subject": ko, "source": c.source,
+                                     "page_url": c.page_url},
+                            "scores": f"사진{v.photo_margin:+.3f} 얼굴{v.face_margin:+.3f} "
+                                      f"글자{v.text_margin:+.3f} 주제{v.subject_score:.2f} {w}x{h}",
+                            "stem": f"reject_{src}_{hexh[:12]}",
+                        }
                     continue
                 stem = f"{src}_{hexh[:12]}"
                 meta = {"category": it["category"], "subject": ko, "source": c.source,
@@ -183,6 +216,27 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, ma
             uploader.append_rows(pending_rows)
         except Exception as e:
             err(f"append_rows: {type(e).__name__}: {str(e)[:120]}")
+    # 탈락 샘플 저장(하루 20장, 실행당 2장, 이유 골고루)
+    day = now_iso[:10]
+    today = pol.samples_today(day)
+    n = min(REJECT_PER_RUN, REJECT_PER_DAY - today["n"])
+    saved = []
+    if rejects is not None and n > 0 and sample_cands:
+        rows = []
+        for sc in pick_samples(sample_cands, today["by_reason"], n):
+            try:
+                fid = rejects.upload(sc["data"], f"{sc['stem']}.jpg")
+                rows.append(drivemod.build_reject_row(sc["meta"], fid, sc["reason"], sc["scores"], now_iso))
+                pol.count_sample(day, sc["key"])
+                saved.append(sc["key"])
+            except Exception as e:
+                err(f"reject upload: {type(e).__name__}: {str(e)[:120]}")
+        try:
+            rejects.write_rows(rows)
+        except Exception as e:
+            err(f"reject rows: {type(e).__name__}: {str(e)[:120]}")
+    report["reject_samples"] = saved
+    pol.save()
     budget.save()
     progress.save()
     pixabay.save_cache()

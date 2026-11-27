@@ -287,3 +287,77 @@ def test_normalize_downscales():
     buf = io.BytesIO(); Image.new("RGB", (5000, 2500), (10, 20, 30)).save(buf, "PNG")
     data, w, h = normalize(buf.getvalue())
     assert (w, h) == (2000, 1000) and data[:2] == b"\xff\xd8"   # JPEG
+
+
+# ── 탈락 샘플·정책 완화 ──
+from types import SimpleNamespace
+from collector import policy as P
+from collector.drive import build_reject_row, parse_judgments
+from collector.run import pick_samples
+
+
+def _rows(reason, wrong, right, at="2026-11-27T01:00:00+00:00"):
+    return ([{"at": at, "reason": reason, "verdict": "오판"}] * wrong +
+            [{"at": at, "reason": reason, "verdict": "정상"}] * right)
+
+
+def test_policy_relaxes_over_50(tmp_path):
+    pol = P.Policy(tmp_path / "p.json")
+    ch = P.evaluate(_rows("그림·삽화·AI풍(사진 아님)", 6, 4), pol, "2026-11-27T02:00:00+00:00")
+    assert ch and ch[0]["to"] == 1 and pol.level("그림·삽화·AI풍") == 1
+
+
+def test_policy_needs_10_and_over_half(tmp_path):
+    pol = P.Policy(tmp_path / "p.json")
+    assert P.evaluate(_rows("얼굴 있음", 6, 3), pol, "2026-11-27T02:00:00+00:00") == []   # 9장
+    assert P.evaluate(_rows("얼굴 있음", 5, 5), pol, "2026-11-27T02:00:00+00:00") == []   # 정확히 50%
+
+
+def test_policy_once_per_day_and_since(tmp_path):
+    pol = P.Policy(tmp_path / "p.json")
+    rows = _rows("글자·로고·워터마크", 8, 2)
+    P.evaluate(rows, pol, "2026-11-27T02:00:00+00:00")
+    assert P.evaluate(rows, pol, "2026-11-27T05:00:00+00:00") == []      # 같은 날 두 번 X
+    # 다음 날: 이전 판정은 since 이전이라 안 셈
+    assert P.evaluate(rows, pol, "2026-11-28T02:00:00+00:00") == []
+    new = _rows("글자·로고·워터마크", 8, 2, at="2026-11-27T03:00:00+00:00")
+    assert P.evaluate(new, pol, "2026-11-28T02:00:00+00:00")[0]["to"] == 2
+
+
+def test_policy_max_level(tmp_path):
+    pol = P.Policy(tmp_path / "p.json")
+    pol.data["rules"]["주제와 약함"] = {"level": 3, "since": "", "changed_at": ""}
+    assert P.evaluate(_rows("주제와 약함(0.10)", 10, 0), pol, "2026-11-27T02:00:00+00:00") == []
+
+
+def test_judge_level0_matches_original():
+    from collector.config import ChecksCfg
+    v = SimpleNamespace(photo_margin=-0.005, face_margin=0.004, text_margin=-0.001, subject_score=0.5)
+    f, c = P.judge(v, {}, ChecksCfg())
+    assert f["is_photo"] is False and f["face"] is True and f["has_text"] is False
+    assert c.min_long_side == 1000 and c.min_subject_score == 0.22
+    f2, c2 = P.judge(v, {"그림·삽화·AI풍": 1, "얼굴 있음": 1, "너무 작음": 2}, ChecksCfg())
+    assert f2["is_photo"] is True and f2["face"] is False and c2.min_long_side == 850
+
+
+def test_pick_samples_balances():
+    cands = {r: {"key": r} for r in ["얼굴 있음", "그림·삽화·AI풍", "너무 작음"]}
+    got = pick_samples(cands, {"그림·삽화·AI풍": 5, "얼굴 있음": 1}, 2)
+    assert [g["key"] for g in got] == ["너무 작음", "얼굴 있음"]
+
+
+def test_reject_row_and_parse():
+    row = build_reject_row({"category": "여행", "subject": "경주", "source": "wikimedia", "page_url": "u"},
+                           "FID", "얼굴 있음", "s", "2026-11-27T01:00:00+00:00")
+    assert len(row) == 11 and row[2].endswith("/FID/view") and row[5] == "Wikimedia Commons"
+    row[9] = "오판"
+    js = parse_judgments([row, [], [""]])
+    assert js == [{"at": "2026-11-27T01:00:00+00:00", "reason": "얼굴 있음", "verdict": "오판"}]
+
+
+def test_policy_state_roundtrip(tmp_path):
+    pol = P.Policy(tmp_path / "p.json")
+    pol.count_sample("2026-11-27", "얼굴 있음"); pol.save()
+    pol2 = P.Policy(tmp_path / "p.json")
+    assert pol2.samples_today("2026-11-27")["n"] == 1
+    assert pol2.samples_today("2026-11-28")["n"] == 0
