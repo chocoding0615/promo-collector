@@ -997,7 +997,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "문화·취미·전시|레코드판": {
+   "kept": 27,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "비즈니스·경제|악수": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "쇼핑·선물|손목시계": {
+   "kept": 8,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 125
+ "rr": 128
 }
