@@ -715,7 +715,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "쇼핑·선물|향수": {
+   "kept": 25,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "시즌·이벤트|벚꽃 축제": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "자기계발·루틴|공부 노트": {
+   "kept": 14,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 88
+ "rr": 91
 }
