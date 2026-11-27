@@ -853,7 +853,37 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "반려동물|길고양이": {
+   "kept": 40,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "책·독서|만년필": {
+   "kept": 6,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|숲길": {
+   "kept": 33,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "인테리어·룸투어|조명 인테리어": {
+   "kept": 0,
+   "offset": {
+    "wikimedia": 36
+   },
+   "done": {}
   }
  },
- "rr": 106
+ "rr": 110
 }
