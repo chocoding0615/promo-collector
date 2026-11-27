@@ -1,13 +1,13 @@
 {
-  "kept": 84,
-  "rejected": 59,
-  "uploaded": 84,
+  "kept": 82,
+  "rejected": 61,
+  "uploaded": 82,
   "reasons": {
-    "그림·삽화·AI풍": 45,
-    "너무 작음": 10,
-    "중복": 4,
+    "그림·삽화·AI풍": 35,
+    "너무 작음": 34,
     "글자·로고·워터마크": 5,
-    "얼굴 있음": 8
+    "얼굴 있음": 6,
+    "중복": 2
   },
   "by_source": {
     "pixabay": 11,
@@ -16,8 +16,8 @@
   },
   "kept_by_source": {
     "pixabay": 10,
-    "openverse": 6,
-    "wikimedia": 68
+    "openverse": 7,
+    "wikimedia": 65
   },
   "caps": {
     "wikimedia": 125,
@@ -41,5 +41,5 @@
     "pixabay": 11,
     "openverse": 7
   },
-  "at": "2026-11-27T20:56:27.426970+00:00"
+  "at": "2026-11-27T21:26:36.961025+00:00"
 }

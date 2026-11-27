@@ -1050,7 +1050,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "반려동물|산책하는 강아지": {
+   "kept": 40,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "책·독서|창가 독서": {
+   "kept": 6,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|바다 파도": {
+   "kept": 36,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 132
+ "rr": 135
 }
