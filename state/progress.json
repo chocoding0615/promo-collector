@@ -662,7 +662,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "책·독서|쌓인 책": {
+   "kept": 18,
+   "offset": {
+    "openverse": 20,
+    "pixabay": 30,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|포근한 담요": {
+   "kept": 24,
+   "offset": {
+    "wikimedia": 38
+   },
+   "done": {}
+  },
+  "인테리어·룸투어|식물 인테리어": {
+   "kept": 22,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 81
+ "rr": 84
 }
