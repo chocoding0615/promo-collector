@@ -1149,7 +1149,30 @@
     "wikimedia": 5
    },
    "done": {}
+  },
+  "반려동물|햄스터": {
+   "kept": 40,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "책·독서|오래된 책": {
+   "kept": 14,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|구름": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 145
+ "rr": 148
 }
