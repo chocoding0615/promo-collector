@@ -967,7 +967,37 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "심리·생활|잔잔한 호수": {
+   "kept": 40,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "인테리어·룸투어|소파": {
+   "kept": 24,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "건강·운동|스트레칭": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|법원": {
+   "kept": 7,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 121
+ "rr": 125
 }
