@@ -556,7 +556,30 @@
     "wikimedia": 49
    },
    "done": {}
+  },
+  "반려동물|시바견": {
+   "kept": 40,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "책·독서|책과 커피": {
+   "kept": 26,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|촛불": {
+   "kept": 29,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 67
+ "rr": 70
 }
