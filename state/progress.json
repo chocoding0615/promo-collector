@@ -1,416 +1,379 @@
 {
- "subjects": {
-  "여행|경복궁": {
-   "kept": 30,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
+  "subjects": {
+    "여행|경복궁": {
+      "kept": 30,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "카페·음식·공간|라떼아트": {
+      "kept": 40,
+      "offset": {
+        "pixabay": 30,
+        "openverse": 20,
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "반려동물|강아지": {
+      "kept": 35,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "책·독서|펼쳐진 책": {
+      "kept": 13,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "심리·생활|창가 햇살": {
+      "kept": 32,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "인테리어·룸투어|거실 인테리어": {
+      "kept": 19,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "건강·운동|요가 매트": {
+      "kept": 30,
+      "offset": {
+        "pixabay": 30,
+        "openverse": 20,
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "뉴스·일반 배경|도시 야경": {
+      "kept": 30,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "문화·취미·전시|미술관": {
+      "kept": 24,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "비즈니스·경제|노트북 책상": {
+      "kept": 11,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "쇼핑·선물|선물 상자": {
+      "kept": 7,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "시즌·이벤트|크리스마스 트리": {
+      "kept": 30,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "자기계발·루틴|플래너": {
+      "kept": 3,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "여행|창덕궁": {
+      "kept": 20,
+      "offset": {
+        "wikimedia": 50,
+        "openverse": 20
+      },
+      "done": {}
+    },
+    "카페·음식·공간|에스프레소": {
+      "kept": 40,
+      "offset": {
+        "pixabay": 30,
+        "openverse": 20,
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "반려동물|고양이": {
+      "kept": 33,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "책·독서|책장": {
+      "kept": 21,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "심리·생활|아침 커튼": {
+      "kept": 32,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "인테리어·룸투어|침실": {
+      "kept": 30,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "건강·운동|덤벨": {
+      "kept": 14,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "뉴스·일반 배경|고층 빌딩": {
+      "kept": 30,
+      "offset": {
+        "wikimedia": 50,
+        "pixabay": 30
+      },
+      "done": {}
+    },
+    "문화·취미·전시|박물관": {
+      "kept": 30,
+      "offset": {
+        "pixabay": 30,
+        "openverse": 20,
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "비즈니스·경제|사무실": {
+      "kept": 25,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "쇼핑·선물|리본": {
+      "kept": 26,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "시즌·이벤트|눈사람": {
+      "kept": 30,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "자기계발·루틴|체크리스트": {
+      "kept": 1,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "wish|광화문": {
+      "kept": 6,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "wish|경복궁 경회루": {
+      "kept": 6,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "여행|덕수궁": {
+      "kept": 30,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "카페·음식·공간|핸드드립 커피": {
+      "kept": 40,
+      "offset": {
+        "pixabay": 30,
+        "openverse": 20,
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "반려동물|아기 고양이": {
+      "kept": 14,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "책·독서|도서관": {
+      "kept": 30,
+      "offset": {
+        "openverse": 20,
+        "pixabay": 30,
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "심리·생활|비 오는 창문": {
+      "kept": 39,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "인테리어·룸투어|주방": {
+      "kept": 25,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "건강·운동|러닝화": {
+      "kept": 30,
+      "offset": {
+        "pixabay": 30,
+        "openverse": 20,
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "뉴스·일반 배경|지하철": {
+      "kept": 30,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "문화·취미·전시|콘서트 무대": {
+      "kept": 20,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "비즈니스·경제|회의 테이블": {
+      "kept": 30,
+      "offset": {
+        "pixabay": 30,
+        "openverse": 20,
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "쇼핑·선물|쇼핑백": {
+      "kept": 21,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "시즌·이벤트|불꽃놀이": {
+      "kept": 30,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "자기계발·루틴|모닝 커피와 책상": {
+      "kept": 3,
+      "offset": {
+        "wikimedia": 12
+      },
+      "done": {}
+    },
+    "여행|남산서울타워": {
+      "kept": 30,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "카페·음식·공간|아이스커피": {
+      "kept": 40,
+      "offset": {
+        "pixabay": 30,
+        "openverse": 20,
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "반려동물|골든리트리버": {
+      "kept": 28,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "책·독서|서점": {
+      "kept": 25,
+      "offset": {
+        "openverse": 20,
+        "pixabay": 30,
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "심리·생활|노을": {
+      "kept": 40,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "인테리어·룸투어|원룸": {
+      "kept": 9,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "건강·운동|산책로": {
+      "kept": 26,
+      "offset": {
+        "pixabay": 30,
+        "openverse": 20,
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "뉴스·일반 배경|고속도로": {
+      "kept": 30,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    },
+    "문화·취미·전시|영화관": {
+      "kept": 15,
+      "offset": {
+        "wikimedia": 50
+      },
+      "done": {}
+    }
   },
-  "카페·음식·공간|라떼아트": {
-   "kept": 40,
-   "offset": {
-    "pixabay": 30,
-    "openverse": 20,
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "반려동물|강아지": {
-   "kept": 35,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "책·독서|펼쳐진 책": {
-   "kept": 13,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "심리·생활|창가 햇살": {
-   "kept": 32,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "인테리어·룸투어|거실 인테리어": {
-   "kept": 19,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "건강·운동|요가 매트": {
-   "kept": 30,
-   "offset": {
-    "pixabay": 30,
-    "openverse": 20,
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "뉴스·일반 배경|도시 야경": {
-   "kept": 30,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "문화·취미·전시|미술관": {
-   "kept": 24,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "비즈니스·경제|노트북 책상": {
-   "kept": 11,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "쇼핑·선물|선물 상자": {
-   "kept": 7,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "시즌·이벤트|크리스마스 트리": {
-   "kept": 30,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "자기계발·루틴|플래너": {
-   "kept": 3,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "여행|창덕궁": {
-   "kept": 20,
-   "offset": {
-    "wikimedia": 50,
-    "openverse": 20
-   },
-   "done": {}
-  },
-  "카페·음식·공간|에스프레소": {
-   "kept": 40,
-   "offset": {
-    "pixabay": 30,
-    "openverse": 20,
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "반려동물|고양이": {
-   "kept": 33,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "책·독서|책장": {
-   "kept": 21,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "심리·생활|아침 커튼": {
-   "kept": 32,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "인테리어·룸투어|침실": {
-   "kept": 30,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "건강·운동|덤벨": {
-   "kept": 14,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "뉴스·일반 배경|고층 빌딩": {
-   "kept": 30,
-   "offset": {
-    "wikimedia": 50,
-    "pixabay": 30
-   },
-   "done": {}
-  },
-  "문화·취미·전시|박물관": {
-   "kept": 30,
-   "offset": {
-    "pixabay": 30,
-    "openverse": 20,
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "비즈니스·경제|사무실": {
-   "kept": 25,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "쇼핑·선물|리본": {
-   "kept": 26,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "시즌·이벤트|눈사람": {
-   "kept": 30,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "자기계발·루틴|체크리스트": {
-   "kept": 1,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "wish|광화문": {
-   "kept": 6,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "wish|경복궁 경회루": {
-   "kept": 6,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "여행|덕수궁": {
-   "kept": 30,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "카페·음식·공간|핸드드립 커피": {
-   "kept": 40,
-   "offset": {
-    "pixabay": 30,
-    "openverse": 20,
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "반려동물|아기 고양이": {
-   "kept": 14,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "책·독서|도서관": {
-   "kept": 30,
-   "offset": {
-    "openverse": 20,
-    "pixabay": 30,
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "심리·생활|비 오는 창문": {
-   "kept": 39,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "인테리어·룸투어|주방": {
-   "kept": 25,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "건강·운동|러닝화": {
-   "kept": 30,
-   "offset": {
-    "pixabay": 30,
-    "openverse": 20,
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "뉴스·일반 배경|지하철": {
-   "kept": 30,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "문화·취미·전시|콘서트 무대": {
-   "kept": 20,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "비즈니스·경제|회의 테이블": {
-   "kept": 30,
-   "offset": {
-    "pixabay": 30,
-    "openverse": 20,
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "쇼핑·선물|쇼핑백": {
-   "kept": 21,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "시즌·이벤트|불꽃놀이": {
-   "kept": 30,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "자기계발·루틴|모닝 커피와 책상": {
-   "kept": 3,
-   "offset": {
-    "wikimedia": 12
-   },
-   "done": {}
-  },
-  "여행|남산서울타워": {
-   "kept": 30,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "카페·음식·공간|아이스커피": {
-   "kept": 40,
-   "offset": {
-    "pixabay": 30,
-    "openverse": 20,
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "반려동물|골든리트리버": {
-   "kept": 28,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "책·독서|서점": {
-   "kept": 25,
-   "offset": {
-    "openverse": 20,
-    "pixabay": 30,
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "wish|군산근대역사박물관": {
-   "kept": 1,
-   "offset": {
-    "wikimedia": 3
-   },
-   "done": {
-    "wikimedia": true,
-    "openverse": true
-   }
-  },
-  "wish|초원사진관": {
-   "kept": 0,
-   "offset": {},
-   "done": {
-    "wikimedia": true
-   }
-  },
-  "wish|동국사": {
-   "kept": 1,
-   "offset": {
-    "wikimedia": 12
-   },
-   "done": {
-    "wikimedia": true,
-    "openverse": true
-   }
-  },
-  "wish|이성당": {
-   "kept": 1,
-   "offset": {
-    "wikimedia": 1
-   },
-   "done": {
-    "wikimedia": true,
-    "openverse": true
-   }
-  },
-  "심리·생활|노을": {
-   "kept": 40,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "인테리어·룸투어|원룸": {
-   "kept": 9,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "건강·운동|산책로": {
-   "kept": 26,
-   "offset": {
-    "pixabay": 30,
-    "openverse": 20,
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "뉴스·일반 배경|고속도로": {
-   "kept": 30,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  },
-  "문화·취미·전시|영화관": {
-   "kept": 15,
-   "offset": {
-    "wikimedia": 50
-   },
-   "done": {}
-  }
- },
- "rr": 48
+  "rr": 48
 }
