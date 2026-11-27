@@ -131,23 +131,57 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, ma
     def left(src):  # 이번 실행에서 이 출처가 더 받을 수 있나
         return took.get(src, 0) < caps.get(src, 0)
 
-    # 수집 요청(Promo 사진 없음 장소)을 맨 앞에
-    wish_items = []
-    if uploader is not None:
+    # 수집 요청(Promo 사진 없음 장소)을 맨 앞에. 도는 중에도 2분마다 새 요청을 확인해 바로 끼워 넣음
+    wish_items, seen_rows = [], set()
+    last_poll = [0.0]
+
+    def poll_wishes():
+        if uploader is None or len(wish_items) >= WISHES_PER_RUN:
+            return []
+        last_poll[0] = time.monotonic()
+        new = []
         try:
-            for w in wishmod.parse(uploader.wish_values())[:WISHES_PER_RUN]:  # 한 회차 최대 20곳, 나머지는 다음 회차
+            for w in wishmod.parse(uploader.wish_values()):
+                if w["row"] in seen_rows or len(wish_items) + len(new) >= WISHES_PER_RUN:
+                    continue
+                seen_rows.add(w["row"])
                 en, memo = (w["en"], "") if w["en"] else wishmod.english_name(w["place"], session)
                 cat = cfg.categories.get(w["category"])
                 order = cat.source_order if cat else ["wikimedia", "openverse"]
-                wish_items.append({"category": w["category"], "target": f"{w['place']}|{en}", "need": cfg.wish_need,
-                                   "order": order, "wish": {**w, "en": en, "memo": memo}})
+                new.append({"category": w["category"], "target": f"{w['place']}|{en}", "need": cfg.wish_need,
+                            "order": order, "wish": {**w, "en": en, "memo": memo}})
         except Exception as e:
             err(f"wishes: {type(e).__name__}: {str(e)[:120]}")
-    report["wishes"] = len(wish_items)
+        wish_items.extend(new)
+        return new
 
-    items = wish_items + rotate(subjects(cfg), progress.rr)
+    def flush_wish(it):
+        """요청 하나를 마치면 바로 관리표에 사진 줄과 요청 상태를 씀(Promo가 10분 안에 다시 찾게)"""
+        if uploader is None:
+            return
+        if pending_rows:
+            try:
+                uploader.append_rows(pending_rows)
+                pending_rows.clear()
+            except Exception as e:
+                err(f"append_rows: {type(e).__name__}: {str(e)[:120]}")
+        w = it["wish"]; key = f"wish|{w['place']}"
+        kept = progress.kept(key)
+        exhausted = all(s not in caps or progress.is_done(key, s) for s in it["order"])
+        try:
+            uploader.update_wishes([{"row": w["row"], "en": w["en"], "status": wishmod.status_for(kept, it["need"], exhausted),
+                                     "count": kept, "memo": " · ".join(x for x in [w.get("memo", ""), f"수집기 {datetime.now(timezone.utc).isoformat()[:16]}"] if x)}])
+        except Exception as e:
+            err(f"update_wishes: {type(e).__name__}: {str(e)[:120]}")
+
+    from collections import deque
+    items = deque(poll_wishes() + rotate(subjects(cfg), progress.rr))
     visited = 0
-    for it in items:
+    while items:
+        if time.monotonic() - last_poll[0] > 120:
+            for w in reversed(poll_wishes()):
+                items.appendleft(w)
+        it = items.popleft()
         if time.monotonic() > deadline or not any(left(s) for s in caps):
             break
         if max_keep and report["kept"] >= max_keep:
@@ -225,7 +259,10 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, ma
                         err(f"upload {stem}: {type(e).__name__}: {str(e)[:120]}")
             if progress.kept(key) >= it["need"]:
                 break
+        if it.get("wish"):
+            flush_wish(it)
 
+    report["wishes"] = len(wish_items)
     progress.rr = progress.rr + max(1, visited)   # 다음 실행은 이어서 다른 주제부터
     # 수집 요청 상태 갱신(D 영어 이름·F 상태·G 장수·H 메모)
     if uploader is not None and wish_items:
