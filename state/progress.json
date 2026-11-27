@@ -146,7 +146,52 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "뉴스·일반 배경|고층 빌딩": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50,
+    "pixabay": 30
+   },
+   "done": {}
+  },
+  "문화·취미·전시|박물관": {
+   "kept": 30,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "비즈니스·경제|사무실": {
+   "kept": 25,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "쇼핑·선물|리본": {
+   "kept": 26,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "시즌·이벤트|눈사람": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "자기계발·루틴|체크리스트": {
+   "kept": 1,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 20
+ "rr": 26
 }
