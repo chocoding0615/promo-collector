@@ -1020,7 +1020,37 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "시즌·이벤트|눈 내린 거리": {
+   "kept": 30,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "자기계발·루틴|모래시계": {
+   "kept": 21,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "여행|첨성대": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "카페·음식·공간|마카롱": {
+   "kept": 3,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 128
+ "rr": 132
 }
