@@ -1,23 +1,22 @@
 {
-  "kept": 77,
-  "rejected": 66,
-  "uploaded": 77,
+  "kept": 71,
+  "rejected": 72,
+  "uploaded": 71,
   "reasons": {
-    "그림·삽화·AI풍": 57,
-    "글자·로고·워터마크": 8,
-    "중복": 3,
-    "얼굴 있음": 6,
-    "너무 작음": 8
+    "그림·삽화·AI풍": 25,
+    "얼굴 있음": 4,
+    "글자·로고·워터마크": 4,
+    "너무 작음": 44
   },
   "by_source": {
-    "openverse": 7,
     "pixabay": 11,
+    "openverse": 7,
     "wikimedia": 125
   },
   "kept_by_source": {
-    "openverse": 5,
-    "pixabay": 2,
-    "wikimedia": 70
+    "pixabay": 11,
+    "openverse": 6,
+    "wikimedia": 54
   },
   "caps": {
     "wikimedia": 125,
@@ -34,28 +33,20 @@
     "너무 작음": 0,
     "주제와 약함": 0
   },
-  "errors": [
-    "append_rows: HttpError: <HttpError 400 when requesting https://sheets.googleapis.com/v4/spreadsheets/1uXWDyfeXpMMy-hWw1OQscsy5bRVE93EMI6gFIvpRdI",
-    "append_rows: HttpError: <HttpError 400 when requesting https://sheets.googleapis.com/v4/spreadsheets/1uXWDyfeXpMMy-hWw1OQscsy5bRVE93EMI6gFIvpRdI",
-    "append_rows: HttpError: <HttpError 400 when requesting https://sheets.googleapis.com/v4/spreadsheets/1uXWDyfeXpMMy-hWw1OQscsy5bRVE93EMI6gFIvpRdI",
-    "append_rows: HttpError: <HttpError 400 when requesting https://sheets.googleapis.com/v4/spreadsheets/1uXWDyfeXpMMy-hWw1OQscsy5bRVE93EMI6gFIvpRdI",
-    "append_rows: HttpError: <HttpError 400 when requesting https://sheets.googleapis.com/v4/spreadsheets/1uXWDyfeXpMMy-hWw1OQscsy5bRVE93EMI6gFIvpRdI"
-  ],
-  "wishes": 4,
+  "wishes": 3,
   "wish_status": {
-    "Gunsan Modern History Museum": "진행(1)",
-    "초원사진관": "진행(0)",
-    "동국사": "진행(1)",
-    "Leesungdang": "진행(1)"
+    "Gunsan Modern History Museum": "못 찾음(1)",
+    "동국사": "못 찾음(1)",
+    "Leesungdang": "못 찾음(1)"
   },
   "reject_samples": [
-    "얼굴 있음",
-    "그림·삽화·AI풍"
+    "글자·로고·워터마크",
+    "너무 작음"
   ],
   "took": {
     "wikimedia": 125,
     "pixabay": 11,
     "openverse": 7
   },
-  "at": "2026-11-27T08:23:33.647670+00:00"
+  "at": "2026-11-27T08:53:10.131443+00:00"
 }
