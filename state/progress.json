@@ -228,7 +228,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "책·독서|도서관": {
+   "kept": 30,
+   "offset": {
+    "openverse": 20,
+    "pixabay": 30,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|비 오는 창문": {
+   "kept": 39,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "인테리어·룸투어|주방": {
+   "kept": 25,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 29
+ "rr": 32
 }
