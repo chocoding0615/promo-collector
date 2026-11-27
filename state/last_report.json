@@ -1,17 +1,23 @@
 {
-  "kept": 20,
-  "rejected": 3,
-  "uploaded": 20,
+  "kept": 170,
+  "rejected": 114,
+  "uploaded": 170,
   "reasons": {
-    "그림·삽화·AI풍": 3,
-    "얼굴 있음": 1,
-    "글자·로고·워터마크": 1
+    "그림·삽화·AI풍": 83,
+    "얼굴 있음": 20,
+    "중복": 3,
+    "너무 작음": 13,
+    "글자·로고·워터마크": 6
   },
   "by_source": {
-    "wikimedia": 23
+    "pixabay": 21,
+    "openverse": 13,
+    "wikimedia": 250
   },
   "kept_by_source": {
-    "wikimedia": 20
+    "pixabay": 11,
+    "openverse": 6,
+    "wikimedia": 153
   },
   "caps": {
     "wikimedia": 250,
@@ -29,12 +35,13 @@
     "주제와 약함": 0
   },
   "reject_samples": [
-    "그림·삽화·AI풍"
+    "너무 작음",
+    "얼굴 있음"
   ],
   "took": {
-    "wikimedia": 23,
-    "pixabay": 0,
-    "openverse": 0
+    "wikimedia": 250,
+    "pixabay": 21,
+    "openverse": 13
   },
-  "at": "2026-11-27T01:06:24.216285+00:00"
+  "at": "2026-11-27T03:42:55.174123+00:00"
 }
