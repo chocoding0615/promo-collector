@@ -327,7 +327,58 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "책·독서|서점": {
+   "kept": 25,
+   "offset": {
+    "openverse": 20,
+    "pixabay": 30,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "wish|군산근대역사박물관": {
+   "kept": 1,
+   "offset": {
+    "wikimedia": 3
+   },
+   "done": {}
+  },
+  "wish|초원사진관": {
+   "kept": 0,
+   "offset": {},
+   "done": {
+    "wikimedia": true
+   }
+  },
+  "wish|동국사": {
+   "kept": 1,
+   "offset": {
+    "wikimedia": 12
+   },
+   "done": {}
+  },
+  "wish|이성당": {
+   "kept": 1,
+   "offset": {
+    "wikimedia": 1
+   },
+   "done": {}
+  },
+  "심리·생활|노을": {
+   "kept": 40,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "인테리어·룸투어|원룸": {
+   "kept": 9,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 42
+ "rr": 45
 }
