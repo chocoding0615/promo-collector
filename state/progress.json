@@ -579,7 +579,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "인테리어·룸투어|미니멀 인테리어": {
+   "kept": 21,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "건강·운동|수영장": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|마이크": {
+   "kept": 14,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 70
+ "rr": 73
 }
