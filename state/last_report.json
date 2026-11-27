@@ -1,22 +1,23 @@
 {
-  "kept": 43,
-  "rejected": 100,
-  "uploaded": 43,
+  "kept": 94,
+  "rejected": 49,
+  "uploaded": 94,
   "reasons": {
-    "그림·삽화·AI풍": 89,
-    "글자·로고·워터마크": 44,
-    "너무 작음": 24,
-    "얼굴 있음": 18,
+    "그림·삽화·AI풍": 36,
+    "얼굴 있음": 7,
+    "너무 작음": 6,
+    "글자·로고·워터마크": 2,
     "중복": 2
   },
   "by_source": {
-    "wikimedia": 125,
     "pixabay": 11,
-    "openverse": 7
+    "openverse": 7,
+    "wikimedia": 125
   },
   "kept_by_source": {
-    "wikimedia": 42,
-    "pixabay": 1
+    "pixabay": 1,
+    "openverse": 5,
+    "wikimedia": 88
   },
   "caps": {
     "wikimedia": 125,
@@ -33,20 +34,17 @@
     "너무 작음": 0,
     "주제와 약함": 0
   },
-  "wishes": 4,
+  "wishes": 3,
   "wish_status": {
-    "Gunsan Modern History Museum": "진행(1)",
-    "초원사진관": "못 찾음(0)",
-    "동국사": "진행(1)",
-    "Leesungdang": "진행(1)"
+    "Gunsan Modern History Museum": "못 찾음(1)",
+    "동국사": "못 찾음(1)",
+    "Leesungdang": "못 찾음(1)"
   },
-  "reject_samples": [
-    "글자·로고·워터마크"
-  ],
+  "reject_samples": [],
   "took": {
     "wikimedia": 125,
     "pixabay": 11,
     "openverse": 7
   },
-  "at": "2026-11-27T09:08:19.029305+00:00"
+  "at": "2026-11-27T09:39:25.125098+00:00"
 }
