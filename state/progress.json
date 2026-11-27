@@ -906,7 +906,38 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "비즈니스·경제|주식 화면": {
+   "kept": 9,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 1,
+    "wikimedia": 30
+   },
+   "done": {}
+  },
+  "쇼핑·선물|액세서리": {
+   "kept": 14,
+   "offset": {
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "시즌·이벤트|단풍": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "자기계발·루틴|포스트잇": {
+   "kept": 2,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 113
+ "rr": 117
 }
