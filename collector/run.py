@@ -21,6 +21,7 @@ from . import config, ratelimit
 from .checks.dedup import Deduper
 from .pipeline import decide
 from . import policy as policymod
+from . import wishes as wishmod
 from .progress import Progress, rotate
 from .sources import SOURCES
 
@@ -129,16 +130,30 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, ma
     def left(src):  # 이번 실행에서 이 출처가 더 받을 수 있나
         return took.get(src, 0) < caps.get(src, 0)
 
-    items = rotate(subjects(cfg), progress.rr)
+    # 수집 요청(Promo 사진 없음 장소)을 맨 앞에
+    wish_items = []
+    if uploader is not None:
+        try:
+            for w in wishmod.parse(uploader.wish_values()):
+                en, memo = (w["en"], "") if w["en"] else wishmod.english_name(w["place"], session)
+                cat = cfg.categories.get(w["category"])
+                order = cat.source_order if cat else ["wikimedia", "openverse"]
+                wish_items.append({"category": w["category"], "target": f"{w['place']}|{en}", "need": cfg.wish_need,
+                                   "order": order, "wish": {**w, "en": en, "memo": memo}})
+        except Exception as e:
+            err(f"wishes: {type(e).__name__}: {str(e)[:120]}")
+    report["wishes"] = len(wish_items)
+
+    items = wish_items + rotate(subjects(cfg), progress.rr)
     visited = 0
     for it in items:
         if time.monotonic() > deadline or not any(left(s) for s in caps):
             break
         if max_keep and report["kept"] >= max_keep:
             break
-        visited += 1
+        visited += 0 if it.get("wish") else 1
         ko, en = split_target(it["target"])
-        key = f"{it['category']}|{ko}"
+        key = f"wish|{ko}" if it.get("wish") else f"{it['category']}|{ko}"
         if progress.kept(key) >= it["need"]:
             continue
         for src in it["order"]:
@@ -211,6 +226,21 @@ def run(cfg: config.Config, *, dry_run: bool, out_dir: Path, state_dir: Path, ma
                 break
 
     progress.rr = progress.rr + max(1, visited)   # 다음 실행은 이어서 다른 주제부터
+    # 수집 요청 상태 갱신(D 영어 이름·F 상태·G 장수·H 메모)
+    if uploader is not None and wish_items:
+        ups = []
+        for it in wish_items:
+            w = it["wish"]; key = f"wish|{w['place']}"
+            kept = progress.kept(key)
+            exhausted = all(s not in caps or progress.is_done(key, s) for s in it["order"])
+            st = wishmod.status_for(kept, it["need"], exhausted)
+            ups.append({"row": w["row"], "en": w["en"], "status": st, "count": kept,
+                        "memo": " · ".join(x for x in [w.get("memo", ""), f"수집기 {now_iso[:16]}"] if x)})
+        report["wish_status"] = {u["en"] or str(u["row"]): f"{u['status']}({u['count']})" for u in ups}
+        try:
+            uploader.update_wishes(ups)
+        except Exception as e:
+            err(f"update_wishes: {type(e).__name__}: {str(e)[:120]}")
     if uploader is not None and pending_rows:
         try:
             uploader.append_rows(pending_rows)

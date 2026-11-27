@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_config_loads_and_validates():
     cfg = config.load(ROOT / "config.yaml")
     assert set(cfg.sources) == {"wikimedia", "pixabay", "openverse"}
-    assert cfg.runs_per_day == 24
+    assert cfg.runs_per_day == 48
     assert cfg.sources["pixabay"].needs_key == "PIXABAY_KEY"
     # 카테고리는 관리표의 한글 이름과 같게
     assert {"여행", "카페·음식·공간", "반려동물", "책·독서"} <= set(cfg.categories)
@@ -32,10 +32,10 @@ def test_config_loads_and_validates():
 
 def test_run_cap_splits_daily_limit_per_hour():
     cfg = config.load(ROOT / "config.yaml")
-    assert cfg.run_cap("wikimedia", 0) == 250     # 6000 ÷ 24
-    assert cfg.run_cap("pixabay", 0) == 21        # 500 ÷ 24 올림
-    assert cfg.run_cap("openverse", 0) == 13      # 300 ÷ 24 올림
-    assert cfg.run_cap("pixabay", 490) == 10      # 남은 하루 한도 이내
+    assert cfg.run_cap("wikimedia", 0) == 125     # 6000 ÷ 48
+    assert cfg.run_cap("pixabay", 0) == 11        # 500 ÷ 48 올림
+    assert cfg.run_cap("openverse", 0) == 7       # 300 ÷ 48 올림
+    assert cfg.run_cap("pixabay", 495) == 5       # 남은 하루 한도 이내
     assert cfg.run_cap("pixabay", 500) == 0
 
 def test_config_rejects_unknown_source_order(tmp_path):
@@ -170,7 +170,7 @@ def test_plan_skips_pixabay_without_key():
     p = runner.plan(cfg, {}, env={})
     assert "pixabay" in p["skipped_sources"] and "pixabay" not in p["caps"]
     p2 = runner.plan(cfg, {}, env={"PIXABAY_KEY": "x"})
-    assert p2["caps"]["pixabay"] == 21 and p2["subjects"] >= 250
+    assert p2["caps"]["pixabay"] == 11 and p2["subjects"] >= 250
 
 def test_subjects_interleave_categories():
     cfg = config.load(ROOT / "config.yaml")
@@ -361,3 +361,38 @@ def test_policy_state_roundtrip(tmp_path):
     pol2 = P.Policy(tmp_path / "p.json")
     assert pol2.samples_today("2026-11-27")["n"] == 1
     assert pol2.samples_today("2026-11-28")["n"] == 0
+
+
+# ── 수집 요청 ──
+from collector import wishes as W
+from collector.drive import wish_updates
+
+
+def test_wish_parse_and_status():
+    vals = [["t", "여행", "경복궁 경회루", "", "a", "대기"], ["t", "여행", "광화문", "Gwanghwamun", "a", "완료", "6"],
+            ["t", "", "향원정", "Hyangwonjeong", "a", "진행", "2"], ["t", "여행", "", "", "", "대기"]]
+    got = W.parse(vals)
+    assert [(g["row"], g["place"], g["en"], g["category"]) for g in got] == [
+        (2, "경복궁 경회루", "", "여행"), (4, "향원정", "Hyangwonjeong", "여행")]
+    assert W.status_for(6, 6, False) == "완료"
+    assert W.status_for(3, 6, True) == "못 찾음"
+    assert W.status_for(3, 6, False) == "진행"
+
+
+def test_wish_updates_only_touch_d_f_g_h():
+    d = wish_updates([{"row": 5, "en": "Gyeonghoeru", "status": "진행", "count": 2, "memo": "m"}])
+    assert [x["range"] for x in d] == ["'수집 요청'!D5", "'수집 요청'!F5:H5"]
+    assert d[1]["values"] == [["진행", "2", "m"]]
+
+
+def test_english_name_fallback():
+    class S:
+        def get(self, *a, **k):
+            raise RuntimeError("offline")
+    assert W.english_name("경회루", S()) == ("경회루", "영어명 없음")
+
+
+def test_config_wish_need_and_half_cap():
+    cfg = config.load(str(Path(__file__).resolve().parents[1] / "config.yaml"))
+    assert cfg.wish_need == 6 and cfg.runs_per_day == 48
+    assert cfg.run_cap("wikimedia", 0) == 125

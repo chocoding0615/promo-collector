@@ -258,3 +258,37 @@ class RejectStore:
         sheets.spreadsheets().values().update(
             spreadsheetId=self.up.sheet_id, range=f"'{REJECT_TAB}'!A{start}:K{end}",
             valueInputOption="RAW", body={"values": rows}).execute()
+
+
+# ── 수집 요청(Promo가 사진 없음으로 적은 장소) ─────────────────
+def wish_updates(updates: list[dict], tab: str = "수집 요청") -> list[dict]:
+    """[{row, en, status, count, memo}] → values.batchUpdate용 data(D·F·G·H 칸만). 순수 함수."""
+    data = []
+    for u in updates:
+        r = u["row"]
+        data.append({"range": f"'{tab}'!D{r}", "values": [[u.get("en", "")]]})
+        data.append({"range": f"'{tab}'!F{r}:H{r}", "values": [[u["status"], str(u.get("count", 0)), u.get("memo", "")]]})
+    return data
+
+
+def _wish_values(self) -> list[list[str]]:
+    _, sheets = self._services()
+    try:
+        return sheets.spreadsheets().values().get(
+            spreadsheetId=self.sheet_id, range="'수집 요청'!A2:H").execute().get("values", [])
+    except Exception as e:  # 탭이 아직 없으면(Promo가 처음 쓸 때 만듦) 빈 목록
+        if "Unable to parse range" in str(e):
+            return []
+        raise
+
+
+def _update_wishes(self, updates: list[dict]) -> None:
+    if not updates:
+        return
+    _, sheets = self._services()
+    sheets.spreadsheets().values().batchUpdate(spreadsheetId=self.sheet_id, body={
+        "valueInputOption": "RAW", "data": wish_updates(updates)}).execute()
+
+
+Uploader.wish_values = _wish_values
+Uploader.update_wishes = _update_wishes

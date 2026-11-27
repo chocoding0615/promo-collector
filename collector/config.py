@@ -41,6 +41,7 @@ class Config:
     checks: ChecksCfg
     runs_per_day: int = 24
     max_run_minutes: int = 40
+    wish_need: int = 6
 
     def enabled_sources(self) -> list[str]:
         return [n for n, s in self.sources.items() if s.enabled]
@@ -87,4 +88,5 @@ def load(path: str | Path) -> Config:
     checks = ChecksCfg(**(raw.get("checks") or {}))
     return Config(sources=sources, categories=categories, checks=checks,
                   runs_per_day=int(raw.get("runs_per_day", 24)),
-                  max_run_minutes=int(raw.get("max_run_minutes", 40)))
+                  max_run_minutes=int(raw.get("max_run_minutes", 40)),
+                  wish_need=int(raw.get("wish_need", 6)))
