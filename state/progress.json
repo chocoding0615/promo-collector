@@ -807,7 +807,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "비즈니스·경제|돼지 저금통": {
+   "kept": 20,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "쇼핑·선물|화장품": {
+   "kept": 14,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "시즌·이벤트|여름 해변": {
+   "kept": 20,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 100
+ "rr": 103
 }
