@@ -1,12 +1,11 @@
 {
-  "kept": 80,
-  "rejected": 63,
-  "uploaded": 80,
+  "kept": 84,
+  "rejected": 59,
+  "uploaded": 84,
   "reasons": {
-    "그림·삽화·AI풍": 51,
-    "글자·로고·워터마크": 3,
-    "너무 작음": 15,
-    "얼굴 있음": 3
+    "그림·삽화·AI풍": 47,
+    "너무 작음": 12,
+    "글자·로고·워터마크": 11
   },
   "by_source": {
     "pixabay": 11,
@@ -14,9 +13,9 @@
     "wikimedia": 125
   },
   "kept_by_source": {
-    "pixabay": 6,
-    "openverse": 4,
-    "wikimedia": 70
+    "pixabay": 3,
+    "openverse": 6,
+    "wikimedia": 75
   },
   "caps": {
     "wikimedia": 125,
@@ -34,14 +33,17 @@
     "주제와 약함": 0
   },
   "wishes": 0,
+  "errors": [
+    "append_rows: HttpError: <HttpError 400 when requesting https://sheets.googleapis.com/v4/spreadsheets/1uXWDyfeXpMMy-hWw1OQscsy5bRVE93EMI6gFIvpRdI"
+  ],
   "reject_samples": [
-    "그림·삽화·AI풍",
-    "너무 작음"
+    "글자·로고·워터마크",
+    "그림·삽화·AI풍"
   ],
   "took": {
     "wikimedia": 125,
     "pixabay": 11,
     "openverse": 7
   },
-  "at": "2026-11-27T06:50:56.835192+00:00"
+  "at": "2026-11-27T07:21:18.322622+00:00"
 }

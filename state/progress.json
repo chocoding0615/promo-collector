@@ -274,7 +274,37 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "비즈니스·경제|회의 테이블": {
+   "kept": 30,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "쇼핑·선물|쇼핑백": {
+   "kept": 21,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "시즌·이벤트|불꽃놀이": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "자기계발·루틴|모닝 커피와 책상": {
+   "kept": 3,
+   "offset": {
+    "wikimedia": 12
+   },
+   "done": {}
   }
  },
- "rr": 35
+ "rr": 39
 }
