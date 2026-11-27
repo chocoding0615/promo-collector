@@ -1,28 +1,26 @@
 {
-  "kept": 84,
-  "rejected": 59,
-  "uploaded": 83,
+  "kept": 82,
+  "rejected": 56,
+  "uploaded": 82,
   "reasons": {
-    "그림·삽화·AI풍": 40,
-    "너무 작음": 17,
-    "얼굴 있음": 7,
-    "글자·로고·워터마크": 4,
-    "중복": 3
+    "그림·삽화·AI풍": 46,
+    "너무 작음": 11,
+    "글자·로고·워터마크": 5,
+    "얼굴 있음": 2
   },
   "by_source": {
     "pixabay": 11,
-    "openverse": 7,
+    "openverse": 2,
     "wikimedia": 125
   },
   "kept_by_source": {
-    "pixabay": 10,
-    "openverse": 5,
-    "wikimedia": 69
+    "pixabay": 6,
+    "wikimedia": 76
   },
   "caps": {
     "wikimedia": 125,
     "pixabay": 11,
-    "openverse": 7
+    "openverse": 2
   },
   "skipped_sources": [],
   "policy_changes": [],
@@ -34,15 +32,12 @@
     "너무 작음": 0,
     "주제와 약함": 0
   },
-  "errors": [
-    "upload wikimedia_9bcc63278e23: HttpError: <HttpError 500 when requesting https://www.googleapis.com/upload/drive/v3/files?fields=id&alt=json&uploadType=multipart "
-  ],
   "wishes": 0,
   "reject_samples": [],
   "took": {
     "wikimedia": 125,
     "pixabay": 11,
-    "openverse": 7
+    "openverse": 2
   },
-  "at": "2026-11-27T23:28:08.643844+00:00"
+  "at": "2026-11-27T23:52:57.770815+00:00"
 }
