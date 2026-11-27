@@ -761,7 +761,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "책·독서|노트와 펜": {
+   "kept": 7,
+   "offset": {
+    "openverse": 20,
+    "pixabay": 30,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|머그컵": {
+   "kept": 25,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "인테리어·룸투어|책상 셋업": {
+   "kept": 11,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 94
+ "rr": 97
 }
