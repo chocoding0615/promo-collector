@@ -250,6 +250,41 @@ categories:
       - 공항|airport terminal
       - 비행기|airplane in sky
       - 태양광 패널|solar panels
+      # 이슈 장면(2026-11-27): 인물 사진 대신 사건을 떠올리게 하는 상황 사진(표지 전면용)
+      - 경찰 단속|police checkpoint at night
+      - 경찰차|police car lights
+      - 술잔과 자동차 키|car keys next to beer glass
+      - 교통사고|car crash damaged car
+      - 구급차|ambulance
+      - 병원 복도|hospital corridor
+      - 응급실|hospital emergency entrance
+      - 백신 주사기|vaccine syringe
+      - 지하철 승강장|subway platform
+      - 기차역 승강장|train station platform
+      - 버스 정류장|bus stop
+      - 판사봉|judge gavel
+      - 교도소 철창|prison bars
+      - 국회 본회의장|parliament chamber
+      - 투표함|ballot box
+      - 원화 지폐|korean won banknotes
+      - 동전|coins pile
+      - 카드 결제|credit card payment terminal
+      - 아파트 단지|apartment complex
+      - 집 열쇠|house keys
+      - 눈 덮인 도로|snowy road
+      - 빙판길|icy road
+      - 폭우|heavy rain street
+      - 미세먼지|smog city haze
+      - 산불|wildfire forest
+      - 스마트폰 알림|smartphone screen notification
+      - 해킹|hacker keyboard dark
+      - 택배 상자|cardboard delivery boxes
+      - 마트 장바구니|supermarket shopping cart
+      - 빈 교실|empty classroom
+      - 시험장 책상|exam hall desks
+      - 결혼반지|wedding rings
+      - 아기 신발|baby shoes
+      - 빈 사무실|empty office desks
   문화·취미·전시:
     source_order: [pixabay, openverse, wikimedia]
     need: 30
