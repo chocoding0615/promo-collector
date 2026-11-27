@@ -43,7 +43,58 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "건강·운동|요가 매트": {
+   "kept": 30,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|도시 야경": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "문화·취미·전시|미술관": {
+   "kept": 24,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "비즈니스·경제|노트북 책상": {
+   "kept": 11,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "쇼핑·선물|선물 상자": {
+   "kept": 7,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "시즌·이벤트|크리스마스 트리": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "자기계발·루틴|플래너": {
+   "kept": 3,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 6
+ "rr": 13
 }
