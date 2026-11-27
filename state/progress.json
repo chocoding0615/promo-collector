@@ -625,7 +625,44 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "시즌·이벤트|할로윈 호박": {
+   "kept": 30,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "자기계발·루틴|정돈된 책상": {
+   "kept": 7,
+   "offset": {
+    "wikimedia": 12
+   },
+   "done": {}
+  },
+  "여행|청계천": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "카페·음식·공간|원목 카페": {
+   "kept": 39,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "반려동물|푸들": {
+   "kept": 7,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 76
+ "rr": 81
 }
