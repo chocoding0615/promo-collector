@@ -1620,7 +1620,31 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "여행|우도": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "카페·음식·공간|떡볶이": {
+   "kept": 34,
+   "offset": {
+    "pixabay": 16,
+    "openverse": 2,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "반려동물|강아지 장난감": {
+   "kept": 16,
+   "offset": {
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 207
+ "rr": 210
 }
