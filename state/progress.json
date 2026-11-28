@@ -1817,7 +1817,31 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "카페·음식·공간|한식 상차림": {
+   "kept": 35,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 3,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|모래 위 발자국": {
+   "kept": 36,
+   "offset": {
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|백신 주사기": {
+   "kept": 8,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 233
+ "rr": 236
 }
