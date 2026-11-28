@@ -1681,7 +1681,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "반려동물|창가 고양이": {
+   "kept": 40,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|눈 내린 풍경": {
+   "kept": 24,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|교통사고": {
+   "kept": 25,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 215
+ "rr": 218
 }
