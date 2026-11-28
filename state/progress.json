@@ -1590,7 +1590,37 @@
     "wikimedia": 44
    },
    "done": {}
+  },
+  "반려동물|거북이": {
+   "kept": 40,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|나무 한 그루": {
+   "kept": 32,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|경찰차": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "문화·취미·전시|캠핑": {
+   "kept": 1,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 203
+ "rr": 207
 }
