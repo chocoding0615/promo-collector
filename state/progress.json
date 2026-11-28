@@ -1385,7 +1385,37 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "뉴스·일반 배경|비행기": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "문화·취미·전시|도자기": {
+   "kept": 30,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "비즈니스·경제|창고": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "쇼핑·선물|장바구니": {
+   "kept": 2,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 176
+ "rr": 180
 }
