@@ -2126,7 +2126,38 @@
     "pixabay": 30
    },
    "done": {}
+  },
+  "여행|다낭 미케비치": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|폭우": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50,
+    "pixabay": 30,
+    "openverse": 20
+   },
+   "done": {}
+  },
+  "여행|마리나베이샌즈": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|미세먼지": {
+   "kept": 6,
+   "offset": {
+    "wikimedia": 50,
+    "openverse": 20
+   },
+   "done": {}
   }
  },
- "rr": 273
+ "rr": 277
 }
