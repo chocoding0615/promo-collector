@@ -1794,7 +1794,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "심리·생활|해바라기": {
+   "kept": 37,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|응급실": {
+   "kept": 28,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "여행|설악산": {
+   "kept": 16,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 230
+ "rr": 233
 }
