@@ -1415,7 +1415,37 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "시즌·이벤트|캠프파이어": {
+   "kept": 30,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "자기계발·루틴|명상 쿠션": {
+   "kept": 12,
+   "offset": {
+    "wikimedia": 37
+   },
+   "done": {}
+  },
+  "여행|감천문화마을": {
+   "kept": 22,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "카페·음식·공간|피자": {
+   "kept": 4,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 180
+ "rr": 184
 }
