@@ -24,23 +24,25 @@
    "done": {}
   },
   "책·독서|펼쳐진 책": {
-   "kept": 13,
+   "kept": 30,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100,
+    "openverse": 20,
+    "pixabay": 30
    },
    "done": {}
   },
   "심리·생활|창가 햇살": {
-   "kept": 32,
+   "kept": 40,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
   "인테리어·룸투어|거실 인테리어": {
-   "kept": 19,
+   "kept": 30,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
@@ -61,23 +63,23 @@
    "done": {}
   },
   "문화·취미·전시|미술관": {
-   "kept": 24,
+   "kept": 30,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
   "비즈니스·경제|노트북 책상": {
-   "kept": 11,
+   "kept": 30,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
   "쇼핑·선물|선물 상자": {
-   "kept": 7,
+   "kept": 9,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
@@ -2301,5 +2303,5 @@
    "done": {}
   }
  },
- "rr": 299
+ "rr": 307
 }
