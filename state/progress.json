@@ -1644,7 +1644,44 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "심리·생활|안개 낀 숲": {
+   "kept": 40,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|술잔과 자동차 키": {
+   "kept": 0,
+   "offset": {},
+   "done": {
+    "wikimedia": true
+   }
+  },
+  "문화·취미·전시|낚시": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "여행|전주한옥마을": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "카페·음식·공간|라면": {
+   "kept": 12,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 210
+ "rr": 215
 }
