@@ -2011,7 +2011,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "뉴스·일반 배경|투표함": {
+   "kept": 24,
+   "offset": {
+    "wikimedia": 50,
+    "pixabay": 30,
+    "openverse": 20
+   },
+   "done": {}
+  },
+  "여행|콜로세움": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|원화 지폐": {
+   "kept": 0,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 258
+ "rr": 261
 }
