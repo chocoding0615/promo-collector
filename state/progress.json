@@ -169,16 +169,19 @@
    "done": {}
   },
   "비즈니스·경제|사무실": {
-   "kept": 25,
+   "kept": 30,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 50,
+    "pixabay": 30,
+    "openverse": 20
    },
    "done": {}
   },
   "쇼핑·선물|리본": {
-   "kept": 26,
+   "kept": 30,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100,
+    "openverse": 20
    },
    "done": {}
   },
@@ -190,9 +193,9 @@
    "done": {}
   },
   "자기계발·루틴|체크리스트": {
-   "kept": 1,
+   "kept": 7,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
@@ -227,9 +230,9 @@
    "done": {}
   },
   "반려동물|아기 고양이": {
-   "kept": 14,
+   "kept": 40,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
@@ -243,16 +246,16 @@
    "done": {}
   },
   "심리·생활|비 오는 창문": {
-   "kept": 39,
+   "kept": 40,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
   "인테리어·룸투어|주방": {
-   "kept": 25,
+   "kept": 30,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
@@ -273,9 +276,9 @@
    "done": {}
   },
   "문화·취미·전시|콘서트 무대": {
-   "kept": 20,
+   "kept": 30,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
@@ -289,9 +292,9 @@
    "done": {}
   },
   "쇼핑·선물|쇼핑백": {
-   "kept": 21,
+   "kept": 24,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
@@ -2305,5 +2308,5 @@
    "done": {}
   }
  },
- "rr": 316
+ "rr": 333
 }
