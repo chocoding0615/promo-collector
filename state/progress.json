@@ -1468,7 +1468,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "인테리어·룸투어|원목 가구": {
+   "kept": 24,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "건강·운동|채소": {
+   "kept": 26,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|태양광 패널": {
+   "kept": 19,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 187
+ "rr": 190
 }
