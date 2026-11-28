@@ -1,13 +1,12 @@
 {
-  "kept": 69,
-  "rejected": 74,
-  "uploaded": 69,
+  "kept": 42,
+  "rejected": 101,
+  "uploaded": 42,
   "reasons": {
-    "그림·삽화·AI풍": 51,
-    "얼굴 있음": 21,
-    "너무 작음": 19,
-    "글자·로고·워터마크": 6,
-    "중복": 2
+    "그림·삽화·AI풍": 78,
+    "얼굴 있음": 32,
+    "너무 작음": 42,
+    "글자·로고·워터마크": 13
   },
   "by_source": {
     "pixabay": 11,
@@ -15,9 +14,8 @@
     "wikimedia": 125
   },
   "kept_by_source": {
-    "pixabay": 7,
-    "openverse": 5,
-    "wikimedia": 57
+    "pixabay": 3,
+    "wikimedia": 39
   },
   "caps": {
     "wikimedia": 125,
@@ -34,27 +32,15 @@
     "너무 작음": 0,
     "주제와 약함": 0
   },
-  "errors": [
-    "download wikimedia: RetryError",
-    "download wikimedia: RetryError",
-    "download wikimedia: RetryError",
-    "download wikimedia: RetryError",
-    "download wikimedia: RetryError",
-    "download wikimedia: RetryError",
-    "download wikimedia: RetryError",
-    "download wikimedia: RetryError",
-    "download wikimedia: RetryError",
-    "download wikimedia: RetryError"
-  ],
   "wishes": 0,
   "reject_samples": [
-    "얼굴 있음",
-    "그림·삽화·AI풍"
+    "너무 작음",
+    "얼굴 있음"
   ],
   "took": {
     "wikimedia": 125,
     "pixabay": 11,
     "openverse": 7
   },
-  "at": "2026-11-28T02:01:57.369530+00:00"
+  "at": "2026-11-28T02:23:45.936960+00:00"
 }

@@ -1309,7 +1309,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "쇼핑·선물|포장지": {
+   "kept": 19,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "시즌·이벤트|졸업 학사모": {
+   "kept": 13,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "자기계발·루틴|물 한 잔": {
+   "kept": 10,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 166
+ "rr": 169
 }
