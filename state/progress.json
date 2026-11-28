@@ -1355,7 +1355,37 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "책·독서|일기장": {
+   "kept": 2,
+   "offset": {
+    "openverse": 20,
+    "pixabay": 30,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|들판": {
+   "kept": 40,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "인테리어·룸투어|한옥 내부": {
+   "kept": 2,
+   "offset": {
+    "wikimedia": 2
+   },
+   "done": {}
+  },
+  "건강·운동|견과류": {
+   "kept": 11,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 172
+ "rr": 176
 }
