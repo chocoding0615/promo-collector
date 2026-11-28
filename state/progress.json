@@ -1926,7 +1926,46 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "여행|통영항": {
+   "kept": 6,
+   "offset": {
+    "wikimedia": 11
+   },
+   "done": {
+    "openverse": true
+   }
+  },
+  "카페·음식·공간|와인잔": {
+   "kept": 39,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|판사봉": {
+   "kept": 11,
+   "offset": {
+    "wikimedia": 49
+   },
+   "done": {}
+  },
+  "여행|여수 밤바다": {
+   "kept": 0,
+   "offset": {},
+   "done": {
+    "wikimedia": true
+   }
+  },
+  "카페·음식·공간|칵테일": {
+   "kept": 13,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 247
+ "rr": 252
 }
