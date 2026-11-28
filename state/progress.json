@@ -2246,7 +2246,37 @@
     "pixabay": 30
    },
    "done": {}
+  },
+  "여행|산토리니": {
+   "kept": 23,
+   "offset": {
+    "wikimedia": 50,
+    "openverse": 20
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|시험장 책상": {
+   "kept": 2,
+   "offset": {
+    "wikimedia": 3,
+    "pixabay": 30
+   },
+   "done": {}
+  },
+  "여행|융프라우": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|결혼반지": {
+   "kept": 19,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 289
+ "rr": 293
 }
