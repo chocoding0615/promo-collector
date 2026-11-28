@@ -2157,7 +2157,36 @@
     "openverse": 20
    },
    "done": {}
+  },
+  "여행|빅토리아 하버": {
+   "kept": 18,
+   "offset": {
+    "wikimedia": 50,
+    "openverse": 20
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|산불": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "여행|타임스스퀘어": {
+   "kept": 19,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|스마트폰 알림": {
+   "kept": 7,
+   "offset": {
+    "pixabay": 30
+   },
+   "done": {}
   }
  },
- "rr": 277
+ "rr": 281
 }
