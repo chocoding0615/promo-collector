@@ -2217,7 +2217,36 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "여행|카를교": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|마트 장바구니": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "여행|쾰른 대성당": {
+   "kept": 28,
+   "offset": {
+    "wikimedia": 50,
+    "openverse": 20
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|빈 교실": {
+   "kept": 4,
+   "offset": {
+    "pixabay": 30
+   },
+   "done": {}
   }
  },
- "rr": 285
+ "rr": 289
 }
