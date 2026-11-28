@@ -2095,7 +2095,38 @@
     "pixabay": 30
    },
    "done": {}
+  },
+  "여행|타이베이 101": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50,
+    "openverse": 20
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|눈 덮인 도로": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50,
+    "pixabay": 30
+   },
+   "done": {}
+  },
+  "여행|왓아룬": {
+   "kept": 23,
+   "offset": {
+    "wikimedia": 50,
+    "openverse": 20
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|빙판길": {
+   "kept": 7,
+   "offset": {
+    "pixabay": 30
+   },
+   "done": {}
   }
  },
- "rr": 269
+ "rr": 273
 }
