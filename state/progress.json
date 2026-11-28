@@ -1202,7 +1202,37 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "비즈니스·경제|서류": {
+   "kept": 16,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "쇼핑·선물|카드와 봉투": {
+   "kept": 1,
+   "offset": {
+    "wikimedia": 20
+   },
+   "done": {}
+  },
+  "시즌·이벤트|발렌타인 초콜릿": {
+   "kept": 20,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "자기계발·루틴|운동화": {
+   "kept": 2,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 152
+ "rr": 156
 }
