@@ -1567,7 +1567,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "문화·취미·전시|그림 도구": {
+   "kept": 5,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "여행|한라산": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "카페·음식·공간|김치찌개": {
+   "kept": 16,
+   "offset": {
+    "wikimedia": 44
+   },
+   "done": {}
   }
  },
- "rr": 200
+ "rr": 203
 }
