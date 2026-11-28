@@ -2186,7 +2186,38 @@
     "pixabay": 30
    },
    "done": {}
+  },
+  "여행|자유의 여신상": {
+   "kept": 21,
+   "offset": {
+    "wikimedia": 50,
+    "openverse": 20
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|해킹": {
+   "kept": 1,
+   "offset": {
+    "pixabay": 30
+   },
+   "done": {
+    "wikimedia": true
+   }
+  },
+  "여행|타워브리지": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|택배 상자": {
+   "kept": 15,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 281
+ "rr": 285
 }
