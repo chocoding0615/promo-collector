@@ -91,16 +91,18 @@
    "done": {}
   },
   "자기계발·루틴|플래너": {
-   "kept": 3,
+   "kept": 15,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100,
+    "pixabay": 30,
+    "openverse": 20
    },
    "done": {}
   },
   "여행|창덕궁": {
-   "kept": 20,
+   "kept": 30,
    "offset": {
-    "wikimedia": 50,
+    "wikimedia": 100,
     "openverse": 20
    },
    "done": {}
@@ -115,23 +117,23 @@
    "done": {}
   },
   "반려동물|고양이": {
-   "kept": 33,
+   "kept": 40,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
   "책·독서|책장": {
-   "kept": 21,
+   "kept": 30,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
   "심리·생활|아침 커튼": {
-   "kept": 32,
+   "kept": 40,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
@@ -143,9 +145,9 @@
    "done": {}
   },
   "건강·운동|덤벨": {
-   "kept": 14,
+   "kept": 17,
    "offset": {
-    "wikimedia": 50
+    "wikimedia": 100
    },
    "done": {}
   },
@@ -2303,5 +2305,5 @@
    "done": {}
   }
  },
- "rr": 307
+ "rr": 316
 }
