@@ -1279,7 +1279,37 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "건강·운동|스무디": {
+   "kept": 30,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|공항": {
+   "kept": 28,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "문화·취미·전시|뜨개질": {
+   "kept": 11,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "비즈니스·경제|코워킹 스페이스": {
+   "kept": 0,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 162
+ "rr": 166
 }
