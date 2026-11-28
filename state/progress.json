@@ -1445,7 +1445,30 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "반려동물|금붕어": {
+   "kept": 26,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "책·독서|책 속 말린 꽃": {
+   "kept": 10,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "심리·생활|공원 벤치": {
+   "kept": 18,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 184
+ "rr": 187
 }
