@@ -1894,7 +1894,39 @@
     "wikimedia": 50
    },
    "done": {}
+  },
+  "뉴스·일반 배경|기차역 승강장": {
+   "kept": 30,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "여행|군산근대역사박물관": {
+   "kept": 0,
+   "offset": {
+    "wikimedia": 3
+   },
+   "done": {
+    "openverse": true
+   }
+  },
+  "카페·음식·공간|차 한 잔": {
+   "kept": 40,
+   "offset": {
+    "pixabay": 30,
+    "openverse": 20,
+    "wikimedia": 50
+   },
+   "done": {}
+  },
+  "뉴스·일반 배경|버스 정류장": {
+   "kept": 26,
+   "offset": {
+    "wikimedia": 50
+   },
+   "done": {}
   }
  },
- "rr": 243
+ "rr": 247
 }
